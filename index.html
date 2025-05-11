@@ -1,3 +1,64 @@
+        // ... (a kód többi része változatlan, idáig) ...
+
+        // --- Időrend Gyakorló Játék Logika ---
+        const timelineEvents = [ 
+            { text: "Teleki Pál miniszterelnökségének kezdete", year: 1920, month: 7, sortKey: 1920.07 },
+            { text: "A Numerus Clausus törvény bevezetése", year: 1920, month: 9, sortKey: 1920.09 }, 
+            { text: "Az I. királypuccs (IV. Károly kísérlete)", year: 1921, month: 3, sortKey: 1921.03 }, 
+            { text: "Teleki Pál lemondása", year: 1921, month: 4, sortKey: 1921.04 },
+            { text: "Bethlen István miniszterelnökségének kezdete", year: 1921, month: 4, sortKey: 1921.041 }, 
+            { text: "A Bethlen-Peyer paktum megkötése", year: 1921, month: 12, sortKey: 1921.12 }, 
+            { text: "A II. királypuccs (budaörsi csata)", year: 1921, month: 10, sortKey: 1921.10 },
+            { text: "A Habsburg-ház trónfosztása (detronizáció)", year: 1921, month: 11, sortKey: 1921.11 },
+            { text: "Magyarország belépése a Népszövetségbe", year: 1922, month: 9, sortKey: 1922.09 }, 
+            { text: "Az új választójogi törvény bevezetése (Bethlen)", year: 1922, month: 3, sortKey: 1922.03 }, 
+            { text: "A Magyar Nemzeti Bank létrehozása", year: 1924, month: 6, sortKey: 1924.06 }, 
+            { text: "Az új pénznem, a pengő bevezetése", year: 1927, month: 1, sortKey: 1927.01 }, 
+            { text: "Az olasz-magyar örökbarátsági szerződés megkötése", year: 1927, month: 4, sortKey: 1927.04 }
+        ];
+
+        let currentEventPair = [];
+        let timelineAttempts = 0;
+        let timelineCorrectAnswers = 0;
+        let totalTimelineResponseTimeForCorrect = 0;
+        let currentPairStartTime = 0;
+        let timelineGameActive = false;
+        let timelineRoundsPlayed = 0;
+        const TIMELINE_ROUNDS_TOTAL = 10;
+
+        const timelineStartScreen = document.getElementById('timeline-start-screen');
+        const timelineGameContent = document.getElementById('timeline-game-content');
+        const eventABtn = document.getElementById('eventA-btn');
+        const eventBBtn = document.getElementById('eventB-btn');
+        const timelineFeedback = document.getElementById('timeline-feedback');
+        const nextPairBtn = document.getElementById('next-pair-btn');
+        const timelineRoundCounter = document.getElementById('timeline-round-counter');
+
+        const finalTimelineStatsDiv = document.getElementById('final-timeline-stats');
+        const finalAttemptsDisplay = document.getElementById('final-attempts-display');
+        const finalCorrectDisplay = document.getElementById('final-correct-display');
+        const finalAccuracyDisplay = document.getElementById('final-accuracy-display');
+        const finalAvgTimeDisplay = document.getElementById('final-avg-time-display');
+        const finalMedalDisplay = document.getElementById('final-medal-display');
+
+
+        function startTimelineGame() {
+            timelineStartScreen.style.display = 'none';
+            finalTimelineStatsDiv.style.display = 'none'; 
+            timelineGameContent.style.display = 'block';
+            document.querySelector('.event-options').style.display = 'block';
+            timelineGameActive = true;
+            timelineRoundsPlayed = 0;
+            resetTimelineGameStats(); 
+            loadNewEventPair();
+        }
+        
+        function resetTimelineGameStats() { 
+            timelineAttempts = 0;
+            timelineCorrectAnswers = 0;
+            totalTimelineResponseTimeForCorrect = 0; 
+        }
+
         function showFinalTimelineStats() {
             timelineGameContent.style.display = 'none';
             finalTimelineStatsDiv.style.display = 'block';
@@ -9,7 +70,7 @@
             const avgTime = timelineCorrectAnswers > 0 ? (totalTimelineResponseTimeForCorrect / timelineCorrectAnswers / 1000).toFixed(1) : "N/A";
             finalAvgTimeDisplay.textContent = avgTime;
 
-            let medalEmoji = "⏳"; // Alapértelmezett emoji
+            let medalEmoji = "⏳"; // Alapértelmezett, ha nem ér el semmit, vagy még nincs elég adat
             if (timelineAttempts >= TIMELINE_ROUNDS_TOTAL) { 
                 const accuracyRate = parseFloat(accuracy);
                 const avgResponseSec = parseFloat(avgTime);
@@ -21,8 +82,167 @@
                 } else if (accuracyRate >= 50) {
                     medalEmoji = "🥉";
                 } else {
-                    medalEmoji = "👎"; // Dislike emoji, ha nem éri el a bronzot sem
+                    medalEmoji = "👎"; // Ha 50% alatt van a pontosság 10 kör után
                 }
             }
             finalMedalDisplay.textContent = medalEmoji;
         }
+        
+        function loadNewEventPair() {
+            if (!timelineGameActive) return; 
+
+            if (timelineRoundsPlayed >= TIMELINE_ROUNDS_TOTAL) {
+                showFinalTimelineStats();
+                return;
+            }
+            timelineRoundsPlayed++;
+            timelineRoundCounter.textContent = timelineRoundsPlayed;
+
+            if (timelineEvents.length < 2) {
+                timelineFeedback.textContent = "Nincs elég esemény a játékhoz.";
+                eventABtn.style.display = "none";
+                eventBBtn.style.display = "none";
+                nextPairBtn.disabled = true;
+                return;
+            }
+            eventABtn.style.display = "block";
+            eventBBtn.style.display = "block";
+
+            let indexA = Math.floor(Math.random() * timelineEvents.length);
+            let indexB = Math.floor(Math.random() * timelineEvents.length);
+            while (indexB === indexA) {
+                indexB = Math.floor(Math.random() * timelineEvents.length);
+            }
+            currentEventPair = Math.random() < 0.5 ? [timelineEvents[indexA], timelineEvents[indexB]] : [timelineEvents[indexB], timelineEvents[indexA]];
+            
+            eventABtn.textContent = currentEventPair[0].text;
+            eventBBtn.textContent = currentEventPair[1].text;
+
+            eventABtn.classList.remove('correct', 'incorrect');
+            eventBBtn.classList.remove('correct', 'incorrect');
+            eventABtn.disabled = false;
+            eventBBtn.disabled = false;
+            timelineFeedback.textContent = "Várom a válaszod...";
+            nextPairBtn.disabled = true; 
+            currentPairStartTime = Date.now();
+        }
+
+        function checkTimelineOrder(selectedIndex) { 
+            if (!timelineGameActive) return; 
+            
+            const responseTime = Date.now() - currentPairStartTime;
+            timelineAttempts++; 
+
+            const chosenEvent = currentEventPair[selectedIndex];
+            const actualEarlierEvent = currentEventPair[0].sortKey < currentEventPair[1].sortKey ? currentEventPair[0] : currentEventPair[1];
+
+            eventABtn.disabled = true;
+            eventBBtn.disabled = true;
+            nextPairBtn.disabled = false;
+
+            if (chosenEvent.sortKey === actualEarlierEvent.sortKey) {
+                timelineFeedback.textContent = `Helyes! (${(responseTime/1000).toFixed(1)} mp)`;
+                timelineFeedback.style.color = "#2ECC71"; 
+                if (selectedIndex === 0) eventABtn.classList.add('correct');
+                else eventBBtn.classList.add('correct');
+                timelineCorrectAnswers++; 
+                totalTimelineResponseTimeForCorrect += responseTime; 
+            } else {
+                timelineFeedback.textContent = `Helytelen. A korábbi: ${actualEarlierEvent.text} (${(responseTime/1000).toFixed(1)} mp)`;
+                timelineFeedback.style.color = "#E74C3C";
+                if (selectedIndex === 0) eventABtn.classList.add('incorrect');
+                else eventBBtn.classList.add('incorrect');
+                if(currentEventPair[0].sortKey === actualEarlierEvent.sortKey) eventABtn.classList.add('correct');
+                else eventBBtn.classList.add('correct');
+            }
+        }
+        
+        // A kvíz onload és egyéb részei változatlanok maradnak az előző kódból
+        // ... (az allQuizQuestions tömb és a kvízhez kapcsolódó JS függvények itt helyezkednek el) ...
+        // Az ablak betöltésekor a kvíz elindul egy random kérdéssel
+        // Az időrendi játék a start gombra vár.
+
+        // Hogy a teljes script meglegyen, idemásolom a kvízhez tartozó releváns részeket is,
+        // feltételezve, hogy az `allQuizQuestions` tömböt a felhasználó már kitöltötte
+        // a kommentben jelzett helyen az előző kódban.
+
+        const allQuizQuestions = [
+            // FONTOS: Ide másold be az összes kérdésedet a `short`, `explanation`, `simple` mezőkkel!
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Mikor volt Teleki Pál első miniszterelnöksége?", 
+                answer: {
+                    short: "1920. július – 1921. április.",
+                    explanation: "Teleki Pál első miniszterelnöki időszaka 1920 júliusától 1921 áprilisáig tartott, a Tanácsköztársaság bukása és a trianoni békeszerződés utáni nehéz időkben.",
+                    simple: "Teleki 1920-21 körül volt először a főnök, amikor nagy volt a káosz az országban."
+                }
+            },
+             { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Ki volt a földművelési miniszter Teleki kormányában, aki a földreformot kidolgozta?", 
+                answer: {
+                    short: "Nagyatádi Szabó István.",
+                    explanation: "Nagyatádi Szabó István, a Kisgazdapárt vezető politikusa volt a földművelési miniszter, és ő felelt a Teleki-kormány földreformjának előkészítéséért.",
+                    simple: "Nagyatádi Szabó István próbált földet adni a parasztoknak Teleki idején."
+                }
+            },
+            { 
+                section: "II. Bethlen István konszolidációs politikája", 
+                question: "Mit jelent a 'konszolidáció' Bethlen István politikájában?", 
+                answer: {
+                    short: "A társadalmi, gazdasági és politikai helyzet stabilizálását, a nyugalom megteremtését egy válságos időszak után.",
+                    explanation: "A bethleni konszolidáció célja az volt, hogy a háború, forradalmak és Trianon utáni bizonytalan, ingatag helyzetet megszilárdítsa, és nyugalmat, stabilitást teremtsen az országban.",
+                    simple: "Bethlen rendet akart tenni a nagy káosz után, hogy az ország megnyugodjon és fejlődni tudjon."
+                }
+            },
+            // ... (és a többi, általad feltöltött kérdés)
+        ];
+
+        let shuffledQuizQuestions = []; // Ezt a kvízhez használjuk
+
+        const quizSectionTitleDisplay = document.getElementById('quiz-section-title-display');
+        const quizQuestionDisplay = document.getElementById('question-display');
+        const quizAnswerDisplayContainer = document.getElementById('answer-display-container');
+        const quizAnswerDisplay = document.getElementById('answer-display');
+        const quizExplanationDisplay = document.getElementById('explanation-display');
+        const simpleExplanationDisplay = document.getElementById('simple-explanation-display');
+        const quizShowAnswerBtn = document.getElementById('show-answer-btn');
+        const quizNextQuestionBtn = document.getElementById('next-question-btn');
+        
+        function loadRandomQuizQuestion() {
+            if (allQuizQuestions.length === 0) {
+                quizQuestionDisplay.textContent = "Nincsenek kérdések a kvízhez.";
+                quizShowAnswerBtn.disabled = true;
+                quizNextQuestionBtn.disabled = true;
+                return;
+            }
+            
+            shuffleArray(allQuizQuestions); 
+
+            const randomIndex = Math.floor(Math.random() * allQuizQuestions.length);
+            const q = allQuizQuestions[randomIndex];
+
+            quizSectionTitleDisplay.textContent = q.section;
+            quizQuestionDisplay.textContent = q.question;
+            quizAnswerDisplay.textContent = q.answer.short;
+            quizExplanationDisplay.textContent = q.answer.explanation;
+            simpleExplanationDisplay.textContent = q.answer.simple;
+            quizAnswerDisplayContainer.style.display = 'none';
+            quizShowAnswerBtn.disabled = false;
+            quizNextQuestionBtn.disabled = false; 
+            quizNextQuestionBtn.textContent = "Másik Kérdés";
+        }
+
+        function showQuizAnswer() {
+            quizAnswerDisplayContainer.style.display = 'block';
+        }
+
+        window.onload = () => {
+            loadRandomQuizQuestion(); 
+            timelineStartScreen.style.display = 'block';
+            timelineGameContent.style.display = 'none';
+            finalTimelineStatsDiv.style.display = 'none';
+        };
+    </script>
+</body>
+</html>
