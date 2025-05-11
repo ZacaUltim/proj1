@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Töri Kvíz és Időrend</title>
+    <title>Faszom Gyakorlat</title> {/* CÍM MÓDOSÍTVA */}
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #333; /* Sötétszürke háttér */
-            color: #e0e0e0; /* Világosszürke szöveg */
+            background-color: #333; 
+            color: #e0e0e0; 
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
         .game-section {
-            background-color: #444; /* Középszürke szekciók */
+            background-color: #444; 
             padding: 25px 30px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
@@ -28,7 +28,7 @@
             border: 1px solid #555;
         }
         h1, h2 {
-            color: #00A8E8; /* Élénk kék címek */
+            color: #00A8E8; 
             text-align: center;
             margin-bottom: 20px;
             text-shadow: 1px 1px 1px #000;
@@ -42,18 +42,18 @@
             font-size: 0.9em; color: #bbb; margin-bottom: 8px;
             font-weight: bold; border-left: 3px solid #00A8E8; padding-left: 10px;
         }
-        .question-text { font-size: 1.15em; margin-bottom: 15px; line-height: 1.6; color: #F1C40F; /* Sárga kérdés */ }
+        .question-text { font-size: 1.15em; margin-bottom: 15px; line-height: 1.6; color: #F1C40F; }
         .answer-container {
-            margin-top: 15px; padding: 15px; background-color: #3d3d3d; /* Sötétebb szürke válasz konténer */
+            margin-top: 15px; padding: 15px; background-color: #3d3d3d; 
             border: 1px solid #555; border-radius: 6px; display: none;
         }
         .answer-title, .explanation-title, .simple-explanation-title { 
             font-weight: bold; display: block; margin-bottom: 5px; 
             font-size: 1.05em;
         }
-        .answer-title { color: #2ECC71; /* Zöld */}
-        .explanation-title { color: #3498DB; /* Kék */}
-        .simple-explanation-title { color: #E67E22; /* Narancs */}
+        .answer-title { color: #2ECC71; }
+        .explanation-title { color: #3498DB; }
+        .simple-explanation-title { color: #E67E22; }
 
         .answer-text, .explanation-text, .simple-explanation-text { 
             margin-bottom: 10px; line-height: 1.5;
@@ -62,7 +62,7 @@
         .simple-explanation-text { font-style: italic;} 
         
         /* Időrend játék specifikus */
-        .event-options { display: none; } /* Alapból rejtett */
+        .event-options { display: none; } 
         .event-options button {
             display: block; width: 100%; padding: 12px; margin-bottom: 10px;
             border: 1px solid #00A8E8; 
@@ -85,23 +85,26 @@
         button:hover { background-color: #0077B3; }
         button:disabled { background: #6c757d; color: #aaa; cursor: not-allowed; }
         
-        .stats-display {
+        .stats-display { /* Ez most csak az időrend játékhoz kell */
             margin-top: 20px; padding: 15px; background-color: #3a3a3a; 
             border-radius: 6px; border: 1px solid #505050; 
             text-align: center;
         }
         .stats-display p { margin: 6px 0; font-size: 1em; color: #ccc;}
         .stats-display .label { color: #00A8E8; font-weight: bold;}
-        .stats-display .medal { font-size: 2.2em; margin-top: 5px; }
+        .stats-display .medal { font-size: 2.2em; margin-top: 5px; } /* Időrend játékhoz medál maradhat */
+         #quiz-progress-container { /* Kvíz haladásának külön konténer */
+            margin-top: 15px; text-align: center; font-size: 0.9em; color: #bbb;
+        }
     </style>
 </head>
 <body>
-    <h1>Töri Kvíz és Időrend</h1>
-    <p style="text-align:center; font-size:1em; color:#ccc;">Tedd próbára tudásod a Teleki és Bethlen korszakról!</p>
+    <h1>Faszom Gyakorlat</h1> {/* CÍM MÓDOSÍTVA */}
+    <p style="text-align:center; font-size:1em; color:#ccc;">Na, nézzük, mit tudsz!</p>
 
     <div class="game-section" id="quiz-section-container">
-        <h2>Kvíz</h2>
-        <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 20px;">Haladj végig a kérdéseken. A válaszok megtekintése után a végén értékelést kapsz az időd alapján.</p>
+        <h2>Kvíz - Gyakorlás</h2>
+        <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 20px;">Menj végig a kérdéseken, és ellenőrizd a tudásod.</p>
         
         <div class="question-area">
             <div id="quiz-section-title-display" class="question-section-title">Témakör</div>
@@ -120,25 +123,23 @@
             <button id="show-answer-btn" onclick="showQuizAnswer()" disabled>Válasz mutatása</button>
             <button id="next-question-btn" onclick="nextQuizQuestion()">Start / Következő kérdés</button>
         </div>
-        <div class="stats-display" id="quiz-stats">
-            <p><span class="label">Haladás:</span> <span id="progress-info">0/0</span></p>
-            <p><span class="label">Eltelt idő:</span> <span id="quiz-timer-display">00:00</span></p>
-            <p class="medal" id="quiz-medal-display">🏅</p>
-            <button id="reset-quiz-btn" onclick="resetQuiz()" style="display:none; margin-top:10px;">Kvíz újraindítása</button>
+        <div id="quiz-progress-container"> {/* Külön konténer a haladásnak */}
+            <p><span id="progress-info">0/0</span></p>
+            <button id="reset-quiz-btn" onclick="resetQuiz()" style="display:none; margin-top:10px;">Újra</button>
         </div>
     </div>
 
     <div class="game-section" id="timeline-section-container">
         <h2>Időrend Gyakorló</h2>
         <div id="timeline-start-screen">
-            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Készen állsz az időutazásra? Kattints a Start gombra!</p>
+            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Készen állsz? Indulhat az időrendi harc!</p>
             <div class="button-container" style="justify-content: center;">
-                <button id="start-timeline-game-btn" onclick="startTimelineGame()">Start Időrend Játék</button>
+                <button id="start-timeline-game-btn" onclick="startTimelineGame()">Start Időrend</button>
             </div>
         </div>
 
         <div id="timeline-game-content" style="display:none;">
-            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Válaszd ki, melyik esemény történt korábban!</p>
+            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Melyik esemény történt korábban?</p>
             <div id="event-pair-display">
                 <p style="text-align:center; font-weight:bold; font-size:1.1em; color: #E74C3C;">Melyik volt előbb?</p>
                 <div class="event-options">
@@ -151,24 +152,28 @@
                 <button id="next-pair-btn" onclick="loadNewEventPair()">Következő pár</button>
             </div>
         </div>
-         <div class="stats-display" id="timeline-stats" style="margin-top: 20px;"> <!-- Statisztika mindig látható -->
+         <div class="stats-display" id="timeline-stats" style="margin-top: 20px;"> 
             <p><span class="label">Próbálkozások:</span> <span id="timeline-attempts-display">0</span></p>
             <p><span class="label">Helyes válaszok:</span> <span id="timeline-correct-display">0</span> (<span id="timeline-accuracy-display">0</span>%)</p>
             <p><span class="label">Átlagos válaszidő:</span> <span id="timeline-avg-time-display">N/A</span> mp</p>
-            <p class="medal" id="timeline-medal-display">⏳</p>
-            <button id="reset-timeline-btn" onclick="resetTimelineGame()" style="margin-top:10px;">Időrend játék újraindítása</button>
+            <p class="medal" id="timeline-medal-display">⏳</p> {/* Időrend játékhoz a medál maradhat, ha szeretnéd, vagy ezt is kiveheted */}
+            <button id="reset-timeline-btn" onclick="resetTimelineGame()" style="margin-top:10px;">Újra</button>
         </div>
     </div>
 
     <script>
         // --- Általános segédfüggvények ---
-        function shuffleArray(array) { /* ... (marad) ... */ }
-        function formatTime(seconds) { /* ... (marad) ... */ }
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
 
         // --- Részletes Kvíz Logika ---
         const allQuizQuestions = [
             // FONTOS: Ide másold be az összes kérdésedet a `short`, `explanation`, `simple` mezőkkel!
-            // Csak egy példát hagyok itt:
+            // Csak pár példát hagyok itt a struktúra miatt:
             { 
                 section: "I. Teleki Pál miniszterelnöksége", 
                 question: "Mikor volt Teleki Pál első miniszterelnöksége?", 
@@ -200,10 +205,7 @@
 
         let shuffledQuizQuestions = [];
         let currentQuizQuestionIndex = -1;
-        let quizStartTime = 0;
-        let quizTimerInterval = null;
-        // let quizScore = 0; // Kivéve
-        let quizActive = false;
+        let quizActive = false; // Csak azt jelzi, elindult-e már a kvíz
 
         const quizSectionTitleDisplay = document.getElementById('quiz-section-title-display');
         const quizQuestionDisplay = document.getElementById('question-display');
@@ -214,37 +216,12 @@
         const quizProgressInfo = document.getElementById('progress-info');
         const quizShowAnswerBtn = document.getElementById('show-answer-btn');
         const quizNextQuestionBtn = document.getElementById('next-question-btn');
-        const quizTimerDisplay = document.getElementById('quiz-timer-display');
-        // const quizScoreDisplay = document.getElementById('quiz-score-display'); // Kivéve
-        const quizMedalDisplay = document.getElementById('quiz-medal-display');
         const resetQuizBtn = document.getElementById('reset-quiz-btn');
-
-        function startQuizTimer() { /* ... (marad) ... */ }
-        function stopQuizTimer() { /* ... (marad) ... */ }
-
-        function calculateQuizMedal(elapsedSeconds) {
-            const totalQuestions = shuffledQuizQuestions.length;
-            // quizScoreDisplay.textContent = currentQuizQuestionIndex + 1; // Kivéve
-
-            let medal = "🏅"; 
-            const timePerQuestion = totalQuestions > 0 ? elapsedSeconds / totalQuestions : Infinity;
-
-            if (timePerQuestion <= 25) medal = "🥇 Arany"; 
-            else if (timePerQuestion <= 45) medal = "🥈 Ezüst"; 
-            else medal = "🥉 Bronz"; 
-            
-            quizMedalDisplay.textContent = medal;
-        }
         
         function resetQuiz() {
-            stopQuizTimer();
             quizActive = false;
             currentQuizQuestionIndex = -1;
-            // quizScore = 0; // Kivéve
-            quizTimerDisplay.textContent = "00:00";
-            // quizScoreDisplay.textContent = "0"; // Kivéve
-            quizMedalDisplay.textContent = "🏅";
-            quizProgressInfo.textContent = "0/0";
+            quizProgressInfo.textContent = `0/${shuffledQuizQuestions.length}`;
             quizQuestionDisplay.textContent = "Kattints a \"Start / Következő kérdés\" gombra!";
             quizSectionTitleDisplay.textContent = "Témakör";
             quizAnswerDisplayContainer.style.display = "none";
@@ -252,13 +229,13 @@
             quizNextQuestionBtn.textContent = "Start / Következő kérdés";
             quizNextQuestionBtn.disabled = false;
             resetQuizBtn.style.display = "none";
-            loadQuiz();
+            loadQuiz(); // Újrakeveri a kérdéseket, ha szükséges
         }
 
         function loadQuiz() {
             shuffledQuizQuestions = [...allQuizQuestions];
             shuffleArray(shuffledQuizQuestions);
-            quizProgressInfo.textContent = `0/${shuffledQuizQuestions.length}`;
+            quizProgressInfo.textContent = `0/${shuffledQuizQuestions.length}`; // Frissítés itt is
             if (shuffledQuizQuestions.length === 0) {
                 quizQuestionDisplay.textContent = "Nincsenek kérdések a kvízhez.";
                 quizNextQuestionBtn.disabled = true;
@@ -267,15 +244,50 @@
             }
         }
 
-        function displayCurrentQuizQuestion() { /* ... (marad, a simpleExplanationDisplay is) ... */ }
+        function displayCurrentQuizQuestion() {
+            if (currentQuizQuestionIndex < shuffledQuizQuestions.length) {
+                const q = shuffledQuizQuestions[currentQuizQuestionIndex];
+                quizSectionTitleDisplay.textContent = q.section;
+                quizQuestionDisplay.textContent = q.question;
+                quizAnswerDisplay.textContent = q.answer.short;
+                quizExplanationDisplay.textContent = q.answer.explanation;
+                simpleExplanationDisplay.textContent = q.answer.simple;
+                quizAnswerDisplayContainer.style.display = 'none';
+                quizShowAnswerBtn.disabled = false;
+                quizProgressInfo.textContent = `${currentQuizQuestionIndex + 1}/${shuffledQuizQuestions.length}`;
+            }
+        }
         
-        function nextQuizQuestion() { /* ... (marad, a quizScoreDisplay és quizScore nélkül) ... */ }
+        function nextQuizQuestion() {
+            if (!quizActive) {
+                if (shuffledQuizQuestions.length === 0) return;
+                quizActive = true;
+                resetQuizBtn.style.display = "inline-block";
+            }
 
-        function showQuizAnswer() { /* ... (marad) ... */ }
+            currentQuizQuestionIndex++;
+            if (currentQuizQuestionIndex < shuffledQuizQuestions.length) {
+                quizNextQuestionBtn.textContent = "Következő kérdés";
+                displayCurrentQuizQuestion();
+            } else {
+                quizQuestionDisplay.textContent = "A kvíz végére értél! Nyomd meg az 'Újra' gombot, ha folytatnád.";
+                quizSectionTitleDisplay.textContent = "Kvíz befejezve";
+                quizAnswerDisplayContainer.style.display = 'none';
+                quizShowAnswerBtn.disabled = true;
+                quizNextQuestionBtn.disabled = true;
+                quizNextQuestionBtn.textContent = "Vége";
+            }
+        }
+
+        function showQuizAnswer() {
+            if (quizActive && currentQuizQuestionIndex >= 0 && currentQuizQuestionIndex < shuffledQuizQuestions.length) {
+                quizAnswerDisplayContainer.style.display = 'block';
+            }
+        }
         
         // --- Időrend Gyakorló Játék Logika ---
-        const timelineEvents = [ /* ... (marad az előző kódból, ahogy beillesztettem) ... */ 
-             { text: "Teleki Pál miniszterelnökségének kezdete", year: 1920, month: 7, sortKey: 1920.07 },
+        const timelineEvents = [ 
+            { text: "Teleki Pál miniszterelnökségének kezdete", year: 1920, month: 7, sortKey: 1920.07 },
             { text: "A Numerus Clausus törvény bevezetése", year: 1920, month: 9, sortKey: 1920.09 }, 
             { text: "Az I. királypuccs (IV. Károly kísérlete)", year: 1921, month: 3, sortKey: 1921.03 }, 
             { text: "Teleki Pál lemondása", year: 1921, month: 4, sortKey: 1921.04 },
@@ -295,7 +307,7 @@
         let timelineCorrectAnswers = 0;
         let totalTimelineResponseTime = 0;
         let currentPairStartTime = 0;
-        let timelineGameActive = false; // Új változó
+        let timelineGameActive = false;
 
         const timelineStartScreen = document.getElementById('timeline-start-screen');
         const timelineGameContent = document.getElementById('timeline-game-content');
@@ -314,41 +326,53 @@
         function startTimelineGame() {
             timelineStartScreen.style.display = 'none';
             timelineGameContent.style.display = 'block';
-            resetTimelineBtn.style.display = 'inline-block'; // Újraindítás gomb megjelenítése
+            document.querySelector('.event-options').style.display = 'block'; // Gombok megjelenítése
+            resetTimelineBtn.style.display = 'inline-block'; 
             timelineGameActive = true;
-            resetTimelineGameStats(); // Statisztikák nullázása a játék indításakor
+            resetTimelineGameStats(); 
             loadNewEventPair();
         }
         
-        function resetTimelineGameStats() { // Külön függvény a statisztikák nullázására
+        function resetTimelineGameStats() { 
             timelineAttempts = 0;
             timelineCorrectAnswers = 0;
             totalTimelineResponseTime = 0;
-            updateTimelineStats();
-            timelineMedalDisplay.textContent = "⏳";
+            updateTimelineStats(); // Ez frissíti a kijelzőket nullára
+            timelineMedalDisplay.textContent = "⏳"; // Alap medál visszaállítása
         }
 
+        function updateTimelineStats() {
+            timelineAttemptsDisplay.textContent = timelineAttempts;
+            timelineCorrectDisplay.textContent = timelineCorrectAnswers;
+            const accuracy = timelineAttempts > 0 ? ((timelineCorrectAnswers / timelineAttempts) * 100).toFixed(0) : 0;
+            timelineAccuracyDisplay.textContent = accuracy;
+            const avgTime = timelineCorrectAnswers > 0 ? (totalTimelineResponseTime / timelineCorrectAnswers / 1000).toFixed(1) : "N/A"; // Csak a helyes válaszok idejét átlagoljuk
+            timelineAvgTimeDisplay.textContent = avgTime;
 
-        function updateTimelineStats() { /* ... (marad) ... */ }
+            let medal = "⏳"; 
+            if (timelineAttempts >= 5) { 
+                const accuracyRate = parseFloat(accuracy);
+                const avgResponseSec = parseFloat(avgTime); // Ha N/A, akkor NaN lesz
+
+                if (accuracyRate >= 90 && !isNaN(avgResponseSec) && avgResponseSec <= 8) medal = "🥇 Arany";
+                else if (accuracyRate >= 75 && !isNaN(avgResponseSec) && avgResponseSec <= 12) medal = "🥈 Ezüst";
+                else if (accuracyRate >= 50) medal = "🥉 Bronz";
+                else medal = "📖 Gyakorolj!";
+            }
+            timelineMedalDisplay.textContent = medal;
+        }
         
         function resetTimelineGame() {
-            if (timelineGameActive) { // Csak akkor nulláz, ha már elindult a játék
-                resetTimelineGameStats();
-                loadNewEventPair();
-            } else { // Ha még nem indult el, és megnyomják a resetet (ami most már a start után jelenik meg)
-                // Esetleg itt is lehetne a start képernyőt mutatni, vagy csak nem csinál semmit.
-                // Most úgy hagyom, hogy csak akkor nulláz, ha már aktív volt.
-            }
-             // A start képernyőt nem hozzuk vissza automatikusan resetkor, ha már elindult a játék.
-            // Ha mégis szeretnéd:
-            // timelineStartScreen.style.display = 'block';
-            // timelineGameContent.style.display = 'none';
-            // timelineGameActive = false;
-            // resetTimelineBtn.style.display = 'none';
+            timelineStartScreen.style.display = 'block'; // Vissza a start képernyőre
+            timelineGameContent.style.display = 'none';
+            document.querySelector('.event-options').style.display = 'none';
+            resetTimelineBtn.style.display = 'none';
+            timelineGameActive = false;
+            resetTimelineGameStats(); // Statisztikák nullázása a teljes újraindításkor
         }
 
         function loadNewEventPair() {
-             if (!timelineGameActive) return; // Ne töltsön, ha nem aktív a játék
+             if (!timelineGameActive) return; 
 
              if (timelineEvents.length < 2) {
                 timelineFeedback.textContent = "Nincs elég esemény a játékhoz.";
@@ -357,8 +381,8 @@
                 nextPairBtn.disabled = true;
                 return;
             }
-            document.querySelector('.event-options').style.display = 'block'; // Gombok megjelenítése
-            eventABtn.style.display = "block"; // Biztosítjuk, hogy látszódjanak
+            // Gombok láthatóvá tétele, ha esetleg el voltak rejtve
+            eventABtn.style.display = "block";
             eventBBtn.style.display = "block";
 
             let indexA = Math.floor(Math.random() * timelineEvents.length);
@@ -381,11 +405,10 @@
         }
 
         function checkTimelineOrder(selectedIndex) { 
-            if (!timelineGameActive) return; // Ne fusson, ha nem aktív
-            /* ... (a többi logika marad) ... */
-             const responseTime = Date.now() - currentPairStartTime;
-            totalTimelineResponseTime += responseTime;
-            timelineAttempts++;
+            if (!timelineGameActive) return; 
+            
+            const responseTime = Date.now() - currentPairStartTime;
+            timelineAttempts++; // Minden próbálkozást számolunk
 
             const chosenEvent = currentEventPair[selectedIndex];
             const actualEarlierEvent = currentEventPair[0].sortKey < currentEventPair[1].sortKey ? currentEventPair[0] : currentEventPair[1];
@@ -399,12 +422,14 @@
                 timelineFeedback.style.color = "#2ECC71"; 
                 if (selectedIndex === 0) eventABtn.classList.add('correct');
                 else eventBBtn.classList.add('correct');
-                timelineCorrectAnswers++;
+                timelineCorrectAnswers++; // Csak a helyes válaszokat adjuk hozzá ehhez
+                totalTimelineResponseTime += responseTime; // És csak a helyesek idejét az átlaghoz
             } else {
                 timelineFeedback.textContent = `Helytelen. A korábbi: ${actualEarlierEvent.text} (${(responseTime/1000).toFixed(1)} mp)`;
                 timelineFeedback.style.color = "#E74C3C";
                 if (selectedIndex === 0) eventABtn.classList.add('incorrect');
                 else eventBBtn.classList.add('incorrect');
+                // A helyeset is kiemeljük
                 if(currentEventPair[0].sortKey === actualEarlierEvent.sortKey) eventABtn.classList.add('correct');
                 else eventBBtn.classList.add('correct');
             }
@@ -413,11 +438,11 @@
         
         window.onload = () => {
             loadQuiz();
-            // Az időrendi játékot nem töltjük be automatikusan, csak a start gomb után
-            document.querySelector('.event-options').style.display = 'none'; // Kezdetben elrejtjük a gombokat
-            nextPairBtn.disabled = true; // Kezdetben a "Következő pár" gomb is inaktív
-            resetTimelineBtn.style.display = 'none'; // Az újraindítás gomb is rejtett, amíg el nem indul a játék
-            updateTimelineStats(); // Kezdeti statisztikák beállítása nullára
+            // Időrendi játék alaphelyzetbe állítása, de nem indítása
+            timelineStartScreen.style.display = 'block';
+            timelineGameContent.style.display = 'none';
+            resetTimelineBtn.style.display = 'none';
+            updateTimelineStats(); 
         };
     </script>
 </body>
