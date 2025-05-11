@@ -3,155 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Töri Teszt Deluxe: Teleki & Bethlen Edition</title>
+    <title>Történelmi Kvíz és Időrend Gyakorló</title>
     <style>
         body {
-            font-family: 'Trebuchet MS', Helvetica, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #333; /* Sötétszürke háttér */
-            color: #e0e0e0; /* Világosszürke szöveg */
+            background-color: #f4f4f4; /* Világosszürke háttér */
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
         .game-section {
-            background-color: #444; /* Középszürke szekciók */
+            background-color: #ffffff; /* Fehér szekciók */
             padding: 25px 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             width: 90%;
-            max-width: 850px;
-            margin-top: 25px;
-            margin-bottom: 25px;
-            border: 2px solid #555;
+            max-width: 800px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
         h1, h2 {
-            color: #00A8E8; /* Élénk kék címek */
+            color: #2c3e50; /* Sötétkék-szürke */
             text-align: center;
-            margin-bottom: 25px;
-            text-shadow: 1px 1px 1px #000;
+            margin-bottom: 20px;
         }
-        h1 { font-size: 2.2em; text-transform: uppercase; letter-spacing: 1px;}
-        h2 { font-size: 1.8em; margin-top: 30px; border-bottom: 2px solid #00A8E8; padding-bottom: 10px;}
+        h1 { font-size: 2em; }
+        h2 { font-size: 1.6em; margin-top: 25px; border-bottom: 1px solid #ddd; padding-bottom: 10px;}
 
         /* Kvíz specifikus */
         .question-area { margin-bottom: 20px; }
         .question-section-title {
-            font-size: 1em; color: #9B59B6; /* Lila */
-            margin-bottom: 10px; font-weight: bold;
-            border-left: 4px solid #9B59B6; padding-left: 12px;
+            font-size: 0.9em; color: #555; margin-bottom: 8px;
+            font-weight: bold; border-left: 3px solid #007bff; padding-left: 10px;
         }
-        .question-text { font-size: 1.2em; margin-bottom: 15px; line-height: 1.5; color: #F1C40F; /* Sárga kérdés */ }
+        .question-text { font-size: 1.15em; margin-bottom: 15px; line-height: 1.6; color: #17a2b8; /* Info kék */ }
         .answer-container {
-            margin-top: 15px; padding: 15px; background-color: #4F4F4F; /* Sötétebb szürke válasz konténer */
-            border: 1px solid #666; border-radius: 8px; display: none;
+            margin-top: 15px; padding: 15px; background-color: #e9ecef; /* Világos háttér */
+            border: 1px solid #ced4da; border-radius: 6px; display: none;
         }
         .answer-title, .explanation-title, .simple-explanation-title { 
             font-weight: bold; display: block; margin-bottom: 5px; 
-            font-size: 1.1em;
+            font-size: 1.05em;
         }
-        .answer-title { color: #2ECC71; /* Zöld */}
-        .explanation-title { color: #3498DB; /* Kék */}
-        .simple-explanation-title { color: #E67E22; /* Narancs */}
+        .answer-title { color: #28a745; /* Siker zöld */}
+        .explanation-title { color: #007bff; /* Elsődleges kék */}
+        .simple-explanation-title { color: #fd7e14; /* Narancs */}
 
         .answer-text, .explanation-text, .simple-explanation-text { 
-            margin-bottom: 12px; line-height: 1.6;
+            margin-bottom: 10px; line-height: 1.5;
             font-size: 1em;
         }
-        .answer-text { color: #9FE2BF; } /* Világoszöld */
-        .explanation-text { color: #A9CCE3; } /* Világoskék */
-        .simple-explanation-text { color: #FAD7A0; font-style: italic;} /* Világos narancs */
+        .answer-text { color: #218838; } 
+        .explanation-text { color: #0056b3; } 
+        .simple-explanation-text { color: #c65e0a; font-style: italic;} 
         
         /* Időrend játék specifikus */
         .event-options button {
-            display: block; width: 100%; padding: 14px; margin-bottom: 12px;
-            border: 2px solid #00A8E8; 
-            background-color: #555; 
-            color: #e0e0e0; cursor: pointer; border-radius: 8px;
-            text-align: left; font-size: 1.05em; transition: all 0.2s ease;
+            display: block; width: 100%; padding: 12px; margin-bottom: 10px;
+            border: 1px solid #007bff; 
+            background-color: #f8f9fa; 
+            color: #333; cursor: pointer; border-radius: 5px;
+            text-align: left; font-size: 1em; transition: background-color 0.2s;
         }
-        .event-options button:hover { background-color: #666; border-color: #F1C40F;}
-        .event-options button.correct { background-color: #27AE60; border-color: #2ECC71; color: white; font-weight: bold; } 
-        .event-options button.incorrect { background-color: #C0392B; border-color: #E74C3C; color: white; font-weight: bold; } 
-        #timeline-feedback { margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.1em; min-height: 1.5em;}
+        .event-options button:hover { background-color: #e2e6ea;}
+        .event-options button.correct { background-color: #d4edda; border-color: #c3e6cb; color: #155724; } 
+        .event-options button.incorrect { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; } 
+        #timeline-feedback { margin-top: 15px; font-weight: bold; text-align: center; font-size: 1.05em; min-height: 1.4em;}
         
-        .button-container { display: flex; justify-content: space-around; margin-top: 30px; }
+        .button-container { display: flex; justify-content: space-around; margin-top: 25px; }
         button {
-            padding: 12px 25px; border: none; border-radius: 8px; 
-            background-color: #00A8E8; 
-            color: #fff; cursor: pointer; font-size: 1.1em;
-            transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-            font-weight: bold; text-transform: uppercase;
+            padding: 10px 20px; border: none; border-radius: 5px; 
+            background-color: #007bff; 
+            color: white; cursor: pointer; font-size: 1em;
+            transition: background-color 0.2s;
         }
-        button:hover { background-color: #0077B3; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
-        button:disabled { background: #777; color: #aaa; cursor: not-allowed; box-shadow: none; }
+        button:hover { background-color: #0056b3; }
+        button:disabled { background: #6c757d; color: #ccc; cursor: not-allowed; }
         
         .stats-display {
-            margin-top: 20px; padding: 15px; background-color: #3D3D3D; 
-            border-radius: 8px; border: 2px dashed #F1C40F; 
+            margin-top: 20px; padding: 15px; background-color: #f8f9fa; 
+            border-radius: 6px; border: 1px solid #dee2e6; 
             text-align: center;
         }
-        .stats-display p { margin: 8px 0; font-size: 1.1em; color: #ccc;}
-        .stats-display .label { color: #F1C40F; font-weight: bold;}
-        .stats-display .medal { font-size: 2.8em; margin-top: 5px; }
+        .stats-display p { margin: 6px 0; font-size: 1em; color: #495057;}
+        .stats-display .label { color: #007bff; font-weight: bold;}
+        .stats-display .medal { font-size: 2.2em; margin-top: 5px; }
     </style>
 </head>
 <body>
-    <h1>Töri Teszt Deluxe: Teleki & Bethlen Edition</h1>
-    <p style="text-align:center; font-size:1.1em; color:#ccc;">Na, vágjunk bele, te kis agytröszt! Nyomd szét ezt a tesztet!</p>
+    <h1>Történelmi Kvíz és Időrend Gyakorló</h1>
+    <p style="text-align:center; font-size:1em; color:#555;">Tedd próbára tudásod a Teleki és Bethlen korszakról!</p>
 
     <div class="game-section" id="quiz-section-container">
-        <h2>A Nagy Agyégető Kvíz</h2>
-        <p style="text-align: center; font-size: 0.95em; color: #bbb; margin-bottom: 20px;">Pörgesd végig a kérdéseket, aztán lesd meg a válaszokat, ha nem megy fejbol. A végén meglátjuk, mekkora májer vagy!</p>
+        <h2>Kvíz</h2>
+        <p style="text-align: center; font-size: 0.9em; color: #6c757d; margin-bottom: 20px;">Haladj végig a kérdéseken. A válaszok megtekintése után a végén értékelést kapsz.</p>
         
         <div class="question-area">
-            <div id="quiz-section-title-display" class="question-section-title">Témafelvezető cucc</div>
-            <div id="question-display" class="question-text">Nyomj a "START / KÖVI KÉRdés" gombra, ha mersz!</div>
+            <div id="quiz-section-title-display" class="question-section-title">Témakör</div>
+            <div id="question-display" class="question-text">Kattints a "Start / Következő kérdés" gombra!</div>
             <div id="answer-display-container" class="answer-container">
-                <strong class="answer-title">A tuti válasz:</strong>
+                <strong class="answer-title">Helyes válasz:</strong>
                 <div id="answer-display" class="answer-text"></div>
-                <strong class="explanation-title">Okosba' a magyarázat:</strong>
+                <strong class="explanation-title">Magyarázat:</strong>
                 <div id="explanation-display" class="explanation-text"></div>
-                <strong class="simple-explanation-title">HülyeBiztos Magyarázat (Pongyolán):</strong>
+                <strong class="simple-explanation-title">Egyszerűen (Lényegében):</strong>
                 <div id="simple-explanation-display" class="simple-explanation-text"></div>
             </div>
         </div>
 
         <div class="button-container">
-            <button id="show-answer-btn" onclick="showQuizAnswer()" disabled>Mutasd a Súgást!</button>
-            <button id="next-question-btn" onclick="nextQuizQuestion()">START / KÖVI KÉRdés</button>
+            <button id="show-answer-btn" onclick="showQuizAnswer()" disabled>Válasz mutatása</button>
+            <button id="next-question-btn" onclick="nextQuizQuestion()">Start / Következő kérdés</button>
         </div>
         <div class="stats-display" id="quiz-stats">
-            <p><span class="label">Haladás, te csicska:</span> <span id="progress-info">0/0</span></p>
-            <p><span class="label">Elcseszett idő:</span> <span id="quiz-timer-display">00:00</span></p>
-            <p><span class="label">Elért Szotyi (Pont):</span> <span id="quiz-score-display">0</span></p>
-            <p class="medal" id="quiz-medal-display">🏅?</p>
-            <button id="reset-quiz-btn" onclick="resetQuiz()" style="display:none; margin-top:10px;">Újra az Egészet, Lúzer!</button>
+            <p><span class="label">Haladás:</span> <span id="progress-info">0/0</span></p>
+            <p><span class="label">Eltelt idő:</span> <span id="quiz-timer-display">00:00</span></p>
+            <p><span class="label">Pontszám:</span> <span id="quiz-score-display">0</span></p>
+            <p class="medal" id="quiz-medal-display">🏅</p>
+            <button id="reset-quiz-btn" onclick="resetQuiz()" style="display:none; margin-top:10px;">Kvíz újraindítása</button>
         </div>
     </div>
 
     <div class="game-section" id="timeline-section-container">
-        <h2>Időrendi Káosz Mester</h2>
-        <p style="text-align: center; font-size: 0.95em; color: #bbb; margin-bottom: 15px;">Mi volt előbb, te kis zseni? Kapd össze magad, mert az idő ketyeg!</p>
+        <h2>Időrend Gyakorló</h2>
+        <p style="text-align: center; font-size: 0.9em; color: #6c757d; margin-bottom: 15px;">Válaszd ki, melyik esemény történt korábban!</p>
         <div id="event-pair-display">
-            <p style="text-align:center; font-weight:bold; font-size:1.3em; color: #E74C3C;">Na, melyik volt hamarabb, he?</p>
+            <p style="text-align:center; font-weight:bold; font-size:1.1em; color: #dc3545;">Melyik volt előbb?</p> <!-- Figyelemfelkeltő piros -->
             <div class="event-options">
                 <button id="eventA-btn" onclick="checkTimelineOrder(0)">Esemény A</button>
                 <button id="eventB-btn" onclick="checkTimelineOrder(1)">Esemény B</button>
             </div>
         </div>
-        <div id="timeline-feedback">...várom a tipped, bajnok...</div>
+        <div id="timeline-feedback">Várom a válaszod...</div>
         <div class="button-container" style="justify-content: center;">
-            <button id="next-pair-btn" onclick="loadNewEventPair()">Jöhet a Kövi Adag!</button>
+            <button id="next-pair-btn" onclick="loadNewEventPair()">Következő pár</button>
         </div>
         <div class="stats-display" id="timeline-stats">
-            <p><span class="label">Próbálkozások száma, te kitartó:</span> <span id="timeline-attempts-display">0</span></p>
-            <p><span class="label">Eltaláltad, te mázlista:</span> <span id="timeline-correct-display">0</span> (<span id="timeline-accuracy-display">0</span>%)</p>
-            <p><span class="label">Átlagos tökölési idő:</span> <span id="timeline-avg-time-display">N/A</span> mp</p>
-            <p class="medal" id="timeline-medal-display">⏳?</p>
-            <button id="reset-timeline-btn" onclick="resetTimelineGame()" style="margin-top:10px;">Nullázás, Kezdjük Elölről!</button>
+            <p><span class="label">Próbálkozások:</span> <span id="timeline-attempts-display">0</span></p>
+            <p><span class="label">Helyes válaszok:</span> <span id="timeline-correct-display">0</span> (<span id="timeline-accuracy-display">0</span>%)</p>
+            <p><span class="label">Átlagos válaszidő:</span> <span id="timeline-avg-time-display">N/A</span> mp</p>
+            <p class="medal" id="timeline-medal-display">⏳</p>
+            <button id="reset-timeline-btn" onclick="resetTimelineGame()" style="margin-top:10px;">Időrend játék újraindítása</button>
         </div>
     </div>
 
@@ -162,71 +158,92 @@
 
         // --- Részletes Kvíz Logika ---
         const allQuizQuestions = [
-            // I. Teleki Pál miniszterelnöksége
             { 
                 section: "I. Teleki Pál miniszterelnöksége", 
-                question: "Mikor kezdődött és meddig tartott Teleki Pál első miniszterelnöksége, te kis okos?", 
+                question: "Mikor volt Teleki Pál első miniszterelnöksége?", 
                 answer: {
                     short: "1920. július – 1921. április.",
-                    explanation: "Teleki Pál első miniszterelnöki ciklusa 1920 júliusától 1921 áprilisáig tartott. Elég sz*r időszak volt az országnak, na.",
-                    simple: "Teleki akkor volt főnök, amikor épp minden romokban hevert a háború után. Kb. egy évig bírta."
+                    explanation: "Teleki Pál első miniszterelnöki időszaka 1920 júliusától 1921 áprilisáig tartott, a Tanácsköztársaság bukása és a trianoni békeszerződés utáni nehéz időkben.",
+                    simple: "Teleki 1920-21 körül volt először a főnök, amikor nagy volt a káosz az országban."
                 }
             },
             { 
                 section: "I. Teleki Pál miniszterelnöksége", 
-                question: "Ki volt az a májer földművelési miniszter Teleki alatt, aki a földreformmal szöszölt?", 
+                question: "Ki volt a földművelési miniszter Teleki kormányában, aki a földreformot kidolgozta?", 
                 answer: {
                     short: "Nagyatádi Szabó István.",
-                    explanation: "Nagyatádi Szabó István volt a földművelési miniszter, ő agyalta ki a Teleki-kormány földreformját. Nagy meló volt, kevés eredménnyel.",
-                    simple: "Nagyatádi Szabó volt a csóka, aki megpróbált földet adni a parasztoknak. Próbálkozásnak jó volt."
+                    explanation: "Nagyatádi Szabó István, a Kisgazdapárt vezető politikusa volt a földművelési miniszter, és ő felelt a Teleki-kormány földreformjának előkészítéséért.",
+                    simple: "Nagyatádi Szabó István próbált földet adni a parasztoknak Teleki idején."
                 }
             },
             { 
                 section: "I. Teleki Pál miniszterelnöksége", 
-                question: "Teleki földreformja: hány paraszt kapott földet, mennyit, és mi maradt a régi sz*r a birtokrendszerben?", 
+                question: "Hány paraszt kapott földet a Teleki-féle földreform során, és milyen mértékűt? Mi maradt meg a régi birtokrendszerből?", 
                 answer: {
-                    short: "~300.000 paraszt kapott 5-10 holdacskát, de a nagybirtokosok vígan röhögtek a markukba.",
-                    explanation: "Kb. 300 ezer paraszt kapott egy kis tyúksz*rnyi, 5-10 holdas földet. De a lényeg: sokan így is föld nélkül maradtak, a nagybirtok rendszer megmaradt, mint a rossz beidegződés.",
-                    simple: "Osztottak egy kis földet, de csak apró darabokat, és a nagy kutyáké maradt a java. Tipikus."
-                }
-            },
-            // ... (Többi kérdést is hasonló stílusban át kell írni a short, explanation és ÚJ simple részekkel!)
-            // Példa a folytatásra:
-            { 
-                section: "I. Teleki Pál miniszterelnöksége", 
-                question: "Milyen keménykedést vetett be Teleki a komcsik és más szélsőséges arcok ellen?", 
-                answer: {
-                    short: "Betiltás, sittre vágás, sőt, kivégzés. Nem cicóztak.",
-                    explanation: "A Teleki-kormány nem finomkodott: betiltották a pártjaikat, börtönbe dugták őket, és volt, akit ki is végeztek. Kemény világ volt.",
-                    simple: "Telekiék nem szerették a balhét, úgyhogy aki nagyon ugrált (főleg a komcsik), azt csúnyán elintézték."
+                    short: "Kb. 300.000 paraszt kapott 5-10 hold földet, de a nagybirtokrendszer továbbra is fennmaradt.",
+                    explanation: "A földreform keretében körülbelül 300 ezer paraszt jutott kisebb, 5-10 holdas földterülethez. Azonban sokan továbbra is földnélküliek maradtak, és a nagybirtokok rendszere nem változott meg lényegesen.",
+                    simple: "Sok kis darab földet osztottak ki, de a gazdagok nagy földjei megmaradtak."
                 }
             },
             { 
                 section: "I. Teleki Pál miniszterelnöksége", 
-                question: "Mi a fene volt az a „numerus clausus” az egyetemeken? Kinek volt ez szívás?", 
+                question: "Milyen eszközökkel lépett fel Teleki kormánya a szélsőséges pártok (pl. kommunisták) ellen?", 
                 answer: {
-                    short: "Megszabták, hogy melyik 'népfajból' hányan mehetnek egyetemre, az országos arányuk szerint. Főleg a zsidóknak volt ez gáz.",
-                    explanation: "A numerus clausus ('zárt szám') azt jelentette, hogy az egyetemekre felvehető hallgatók számát „népfajok” (főleg a zsidókra értve) és nemzetiségek szerint korlátozták, az országos arányukhoz igazítva. Elég para.",
-                    simple: "A zsidókat és más kisebbségeket kicsit kiszorították az egyetemekről, hogy több 'magyar' férjen be. Nem volt túl korrekt."
+                    short: "Betiltással, bebörtönzéssel, és akár kivégzéssel is.",
+                    explanation: "A Teleki-kormány keményen fellépett a szélsőséges politikai csoportokkal, különösen a kommunistákkal szemben. Intézkedéseik közé tartozott a pártok betiltása, tagjaik bebörtönzése, és súlyosabb esetekben kivégzések is előfordultak.",
+                    simple: "Aki nagyon szélsőséges volt, azt Telekiék keményen büntették: betiltották, börtönbe zárták, vagy még rosszabb."
                 }
             },
-            // ... és így tovább az összes kérdésre!
-
-            // ÚJ simple explanation mezőt hozzá kell adni MINDEN allQuizQuestions elemhez.
-            // Az alábbiak csak példák, az ÖSSZES kérdést át kell dolgozni.
             { 
-                section: "IV. Bethlen külpolitikája", 
-                question: "Melyik országgal cimborált Bethlen, és kötött vele 'örökbarátsági' szerződést 1927-ben, hogy ne legyünk már annyira egyedül?", 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Mit jelentett a „numerus clausus” az egyetemi felvételeknél?", 
                 answer: {
-                    short: "Olaszországgal. Mussoliniékkal spanoltak.",
-                    explanation: "1927-ben Magyarország Olaszországgal kötött örökbarátsági szerződést. Ez nagy cucc volt, mert Bethlen ezzel próbált kitörni a külpolitikai karanténból.",
-                    simple: "Bethlen haverkodott az olaszokkal, mert mindenki más utált minket Trianon miatt. Kellett egy span."
+                    short: "Az egyetemeken a „népfajok” és nemzetiségek felvételét az országos arányukhoz kötötték, korlátozva ezzel elsősorban a zsidó hallgatók számát.",
+                    explanation: "A numerus clausus (zárt szám) törvény értelmében az egyetemekre felvehető hallgatók számát az egyes „népfajokhoz” (ez a gyakorlatban elsősorban a zsidóságot érintette) és nemzetiségekhez tartozók esetében az országos népességarányukhoz igazították.",
+                    simple: "Korlátozták, hogy pl. hány zsidó diák mehet egyetemre, hogy több hely maradjon másoknak."
+                }
+            },
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Milyen folyamatot ír le az „őrségváltás” kifejezés a numerus clausus kapcsán?", 
+                answer: {
+                    short: "A zsidó értelmiség helyének átvételét keresztény, nemzeti értelmiségiek által.",
+                    explanation: "Az „őrségváltás” fogalma arra a törekvésre utalt, hogy a numerus clausus és más intézkedések révén a korábban jelentős számú zsidó értelmiséget háttérbe szorítsák, és helyüket keresztény, nemzeti elköteleződésű értelmiségiek vegyék át.",
+                    simple: "A zsidó értelmiség helyett keresztény, magyar értelmiséget akartak látni fontos pozíciókban."
+                }
+            },
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Mikor volt az I. királypuccs, ki próbálta visszaszerezni a trónt, és mi lett ennek a következménye Teleki Pálra nézve?", 
+                answer: {
+                    short: "1921. március-áprilisában IV. Károly sikertelenül próbálta visszaszerezni a trónt, ami után Teleki Pál lemondott.",
+                    explanation: "1921 márciusában és áprilisában IV. Károly, az utolsó Habsburg uralkodó, sikertelen kísérletet tett a magyar trón visszaszerzésére. Ez az esemény, az I. királypuccs, végül Teleki Pál miniszterelnök lemondásához vezetett.",
+                    simple: "IV. Károly király vissza akart jönni uralkodni 1921-ben, de nem sikerült neki. Teleki emiatt lemondott."
+                }
+            },
+            // Folytasd az összes többi kérdéssel ugyanígy...
+            // Például a Bethlen-korszakból:
+            { 
+                section: "II. Bethlen István konszolidációs politikája", 
+                question: "Mit jelent a 'konszolidáció' Bethlen István politikájában?", 
+                answer: {
+                    short: "A társadalmi, gazdasági és politikai helyzet stabilizálását, a nyugalom megteremtését egy válságos időszak után.",
+                    explanation: "A bethleni konszolidáció célja az volt, hogy a háború, forradalmak és Trianon utáni bizonytalan, ingatag helyzetet megszilárdítsa, és nyugalmat, stabilitást teremtsen az országban.",
+                    simple: "Bethlen rendet akart tenni a nagy káosz után, hogy az ország megnyugodjon és fejlődni tudjon."
+                }
+            },
+            {
+                section: "IV. Bethlen külpolitikája",
+                question: "Melyik országgal kötött Magyarország örökbarátsági szerződést 1927-ben?",
+                answer: {
+                    short: "Olaszországgal.",
+                    explanation: "1927-ben Magyarország és Olaszország között örökbarátsági szerződés jött létre. Ez fontos lépés volt Magyarország külpolitikai elszigeteltségének enyhítésére.",
+                    simple: "Bethlen Olaszországgal barátkozott, hogy legyenek szövetségeseink."
                 }
             }
         ];
-        // FIGYELEM: A fenti allQuizQuestions tömböt ki kell egészíteni az ÖSSZES kérdéseddel,
-        // és mindegyikhez meg kell írni a short, explanation, ÉS simple magyarázatokat!
-        // Ez most csak egy rövidített példa.
+        // FONTOS: Töltsd fel az `allQuizQuestions` tömböt az összes diádról származó kérdéssel,
+        // és mindegyikhez add meg a `short`, `explanation` és `simple` magyarázatokat!
 
         let shuffledQuizQuestions = [];
         let currentQuizQuestionIndex = -1;
@@ -240,7 +257,7 @@
         const quizAnswerDisplayContainer = document.getElementById('answer-display-container');
         const quizAnswerDisplay = document.getElementById('answer-display');
         const quizExplanationDisplay = document.getElementById('explanation-display');
-        const simpleExplanationDisplay = document.getElementById('simple-explanation-display'); // ÚJ
+        const simpleExplanationDisplay = document.getElementById('simple-explanation-display');
         const quizProgressInfo = document.getElementById('progress-info');
         const quizShowAnswerBtn = document.getElementById('show-answer-btn');
         const quizNextQuestionBtn = document.getElementById('next-question-btn');
@@ -248,7 +265,6 @@
         const quizScoreDisplay = document.getElementById('quiz-score-display');
         const quizMedalDisplay = document.getElementById('quiz-medal-display');
         const resetQuizBtn = document.getElementById('reset-quiz-btn');
-
 
         function startQuizTimer() { /* ... (marad) ... */ }
         function stopQuizTimer() { /* ... (marad) ... */ }
@@ -258,12 +274,12 @@
             quizScore = currentQuizQuestionIndex + 1; 
             quizScoreDisplay.textContent = quizScore;
 
-            let medal = "";
+            let medal = "🏅"; // Alap medál
             const timePerQuestion = totalQuestions > 0 ? elapsedSeconds / totalQuestions : Infinity;
 
-            if (timePerQuestion <= 20) medal = "🥇 Arany Agy (Villám Vágod!)"; 
-            else if (timePerQuestion <= 40) medal = "🥈 Ezüst Pacsirta (Nem vagy gyenge!)"; 
-            else medal = "🥉 Bronz Csiga (Legalább végignyomtad!)"; 
+            if (timePerQuestion <= 25) medal = "🥇 Arany"; 
+            else if (timePerQuestion <= 45) medal = "🥈 Ezüst"; 
+            else medal = "🥉 Bronz"; 
             
             quizMedalDisplay.textContent = medal;
         }
@@ -275,13 +291,13 @@
             quizScore = 0;
             quizTimerDisplay.textContent = "00:00";
             quizScoreDisplay.textContent = "0";
-            quizMedalDisplay.textContent = "🏅?";
+            quizMedalDisplay.textContent = "🏅";
             quizProgressInfo.textContent = "0/0";
-            quizQuestionDisplay.textContent = "Nyomj a \"START / KÖVI KÉRdés\" gombra, ha mersz!";
-            quizSectionTitleDisplay.textContent = "Témafelvezető cucc";
+            quizQuestionDisplay.textContent = "Kattints a \"Start / Következő kérdés\" gombra!";
+            quizSectionTitleDisplay.textContent = "Témakör";
             quizAnswerDisplayContainer.style.display = "none";
             quizShowAnswerBtn.disabled = true;
-            quizNextQuestionBtn.textContent = "START / KÖVI KÉRdés";
+            quizNextQuestionBtn.textContent = "Start / Következő kérdés";
             quizNextQuestionBtn.disabled = false;
             resetQuizBtn.style.display = "none";
             loadQuiz();
@@ -291,11 +307,11 @@
             shuffledQuizQuestions = [...allQuizQuestions];
             shuffleArray(shuffledQuizQuestions);
             quizProgressInfo.textContent = `0/${shuffledQuizQuestions.length}`;
-             // Győződj meg róla, hogy a tömb nem üres, mielőtt indexelni próbálsz
-            if (shuffledQuizQuestions.length > 0) {
-                 // Itt nem kell semmit megjeleníteni, csak a progress infót frissíteni
+            if (shuffledQuizQuestions.length === 0) {
+                quizQuestionDisplay.textContent = "Nincsenek kérdések a kvízhez.";
+                quizNextQuestionBtn.disabled = true;
             } else {
-                quizQuestionDisplay.textContent = "Hoppá, nincsenek kérdések! Valami gáz van a mátrixban.";
+                quizNextQuestionBtn.disabled = false;
             }
         }
 
@@ -306,25 +322,22 @@
                 quizQuestionDisplay.textContent = q.question;
                 quizAnswerDisplay.textContent = q.answer.short;
                 quizExplanationDisplay.textContent = q.answer.explanation;
-                simpleExplanationDisplay.textContent = q.answer.simple; // ÚJ
+                simpleExplanationDisplay.textContent = q.answer.simple;
                 quizAnswerDisplayContainer.style.display = 'none';
                 quizShowAnswerBtn.disabled = false;
                 quizNextQuestionBtn.disabled = false;
                 quizProgressInfo.textContent = `${currentQuizQuestionIndex + 1}/${shuffledQuizQuestions.length}`;
-                quizNextQuestionBtn.textContent = "KÖVI KÉRdés";
+                quizNextQuestionBtn.textContent = "Következő kérdés";
             }
         }
         
         function nextQuizQuestion() {
             if (!quizActive) {
-                if (shuffledQuizQuestions.length === 0) { // Ellenőrzés, hogy vannak-e kérdések
-                    quizQuestionDisplay.textContent = "Nincsenek kérdések, te kis huncut! Töltsd fel őket!";
-                    return;
-                }
+                if (shuffledQuizQuestions.length === 0) return;
                 quizActive = true;
                 startQuizTimer();
-                resetQuizBtn.style.display = "block";
-                 quizNextQuestionBtn.textContent = "KÖVI KÉRdés"; // Gomb feliratának frissítése start után
+                resetQuizBtn.style.display = "inline-block"; // Változtatás: inline-block
+                quizNextQuestionBtn.textContent = "Következő kérdés";
             }
 
             currentQuizQuestionIndex++;
@@ -333,16 +346,15 @@
             } else {
                 stopQuizTimer();
                 const elapsedTime = quizStartTime > 0 ? Math.floor((Date.now() - quizStartTime) / 1000) : 0;
-                quizQuestionDisplay.textContent = "Vége a gyötrelemnek! Megcsináltad a Nagy Agyégető Kvízt!";
-                quizSectionTitleDisplay.textContent = "Kvíz KÉSZ, BAZMEG!";
+                quizQuestionDisplay.textContent = "A kvíz végére értél!";
+                quizSectionTitleDisplay.textContent = "Kvíz befejezve";
                 quizAnswerDisplayContainer.style.display = 'none';
                 quizShowAnswerBtn.disabled = true;
                 quizNextQuestionBtn.disabled = true;
-                quizNextQuestionBtn.textContent = "ENNYI VOLT";
+                quizNextQuestionBtn.textContent = "Vége";
                 calculateQuizMedal(elapsedTime);
             }
         }
-
 
         function showQuizAnswer() {
             if (currentQuizQuestionIndex >= 0 && currentQuizQuestionIndex < shuffledQuizQuestions.length) {
@@ -351,8 +363,21 @@
         }
         
         // --- Időrend Gyakorló Játék Logika ---
-        const timelineEvents = [ /* ... (marad az előző kódból) ... */ ];
-        // FONTOS: A timelineEvents tömböt is másold be az előző verzióból!
+        const timelineEvents = [ // Most már itt van a tömb!
+            { text: "Teleki Pál miniszterelnökségének kezdete", year: 1920, month: 7, sortKey: 1920.07 },
+            { text: "A Numerus Clausus törvény bevezetése", year: 1920, month: 9, sortKey: 1920.09 }, 
+            { text: "Az I. királypuccs (IV. Károly kísérlete)", year: 1921, month: 3, sortKey: 1921.03 }, 
+            { text: "Teleki Pál lemondása", year: 1921, month: 4, sortKey: 1921.04 },
+            { text: "Bethlen István miniszterelnökségének kezdete", year: 1921, month: 4, sortKey: 1921.041 }, 
+            { text: "A Bethlen-Peyer paktum megkötése", year: 1921, month: 12, sortKey: 1921.12 }, 
+            { text: "A II. királypuccs (budaörsi csata)", year: 1921, month: 10, sortKey: 1921.10 },
+            { text: "A Habsburg-ház trónfosztása (detronizáció)", year: 1921, month: 11, sortKey: 1921.11 },
+            { text: "Magyarország belépése a Népszövetségbe", year: 1922, month: 9, sortKey: 1922.09 }, 
+            { text: "Az új választójogi törvény bevezetése (Bethlen)", year: 1922, month: 3, sortKey: 1922.03 }, 
+            { text: "A Magyar Nemzeti Bank létrehozása", year: 1924, month: 6, sortKey: 1924.06 }, 
+            { text: "Az új pénznem, a pengő bevezetése", year: 1927, month: 1, sortKey: 1927.01 }, 
+            { text: "Az olasz-magyar örökbarátsági szerződés megkötése", year: 1927, month: 4, sortKey: 1927.04 }
+        ];
 
         let currentEventPair = [];
         let timelineAttempts = 0;
@@ -378,15 +403,15 @@
             const avgTime = timelineAttempts > 0 ? (totalTimelineResponseTime / timelineAttempts / 1000).toFixed(1) : "N/A";
             timelineAvgTimeDisplay.textContent = avgTime;
 
-            let medal = "⏳?";
+            let medal = "⏳"; // Alap medál
             if (timelineAttempts >= 5) { 
                 const accuracyRate = parseFloat(accuracy);
                 const avgResponseSec = parseFloat(avgTime);
 
-                if (accuracyRate >= 90 && avgResponseSec <= 8) medal = "🥇 Idő Lord (Istencsászár vagy!)";
-                else if (accuracyRate >= 75 && avgResponseSec <= 12) medal = "🥈 Krono-Mágus (Nem semmi!)";
-                else if (accuracyRate >= 50) medal = "🥉 Idő Botos (Van még hova fejlődni, de küzdesz!)";
-                else medal = "🐌 Lassú Víz Partot Mos? (Na, ezt azért nem...)";
+                if (accuracyRate >= 90 && avgResponseSec <= 8) medal = "🥇 Arany";
+                else if (accuracyRate >= 75 && avgResponseSec <= 12) medal = "🥈 Ezüst";
+                else if (accuracyRate >= 50) medal = "🥉 Bronz";
+                else medal = "📖 Gyakorolj még!";
             }
             timelineMedalDisplay.textContent = medal;
         }
@@ -396,13 +421,13 @@
             timelineCorrectAnswers = 0;
             totalTimelineResponseTime = 0;
             updateTimelineStats();
-            timelineMedalDisplay.textContent = "⏳?";
+            timelineMedalDisplay.textContent = "⏳";
             loadNewEventPair();
         }
 
         function loadNewEventPair() {
              if (timelineEvents.length < 2) {
-                timelineFeedback.textContent = "Nincs elég esemény a játékhoz, te kis mókamester!";
+                timelineFeedback.textContent = "Nincs elég esemény a játékhoz.";
                 eventABtn.style.display = "none";
                 eventBBtn.style.display = "none";
                 nextPairBtn.disabled = true;
@@ -413,9 +438,10 @@
 
             let indexA = Math.floor(Math.random() * timelineEvents.length);
             let indexB = Math.floor(Math.random() * timelineEvents.length);
-            while (indexB === indexA) {
+            while (indexB === indexA) { // Biztosítjuk, hogy ne ugyanaz legyen a két esemény
                 indexB = Math.floor(Math.random() * timelineEvents.length);
             }
+            // Véletlenszerűen cseréljük fel őket néha
             currentEventPair = Math.random() < 0.5 ? [timelineEvents[indexA], timelineEvents[indexB]] : [timelineEvents[indexB], timelineEvents[indexA]];
             
             eventABtn.textContent = currentEventPair[0].text;
@@ -425,35 +451,36 @@
             eventBBtn.classList.remove('correct', 'incorrect');
             eventABtn.disabled = false;
             eventBBtn.disabled = false;
-            timelineFeedback.textContent = "...várom a tipped, bajnok...";
+            timelineFeedback.textContent = "Várom a válaszod...";
             nextPairBtn.disabled = true; 
             currentPairStartTime = Date.now();
         }
 
-        function checkTimelineOrder(selectedIndex) { /* ... (marad az előző kódból, de a szövegek frissülhetnek) ... */ 
+        function checkTimelineOrder(selectedIndex) { 
             const responseTime = Date.now() - currentPairStartTime;
             totalTimelineResponseTime += responseTime;
             timelineAttempts++;
 
             const chosenEvent = currentEventPair[selectedIndex];
-            const otherEvent = currentEventPair[1 - selectedIndex];
-            const actualEarlierEvent = timelineEvents.find(e => e.sortKey === Math.min(currentEventPair[0].sortKey, currentEventPair[1].sortKey));
+            // A helyes korábbi esemény meghatározása a sortKey alapján
+            const actualEarlierEvent = currentEventPair[0].sortKey < currentEventPair[1].sortKey ? currentEventPair[0] : currentEventPair[1];
 
             eventABtn.disabled = true;
             eventBBtn.disabled = true;
             nextPairBtn.disabled = false;
 
             if (chosenEvent.sortKey === actualEarlierEvent.sortKey) {
-                timelineFeedback.textContent = `Király vagy! Bejött! (${(responseTime/1000).toFixed(1)} mp)`;
-                timelineFeedback.style.color = "#2ECC71"; 
+                timelineFeedback.textContent = `Helyes! (${(responseTime/1000).toFixed(1)} mp)`;
+                timelineFeedback.style.color = "#28a745"; 
                 if (selectedIndex === 0) eventABtn.classList.add('correct');
                 else eventBBtn.classList.add('correct');
                 timelineCorrectAnswers++;
             } else {
-                timelineFeedback.textContent = `Francokat! A helyes: ${actualEarlierEvent.text} (${(responseTime/1000).toFixed(1)} mp)`;
-                timelineFeedback.style.color = "#E74C3C";
+                timelineFeedback.textContent = `Helytelen. A korábbi: ${actualEarlierEvent.text} (${(responseTime/1000).toFixed(1)} mp)`;
+                timelineFeedback.style.color = "#dc3545";
                 if (selectedIndex === 0) eventABtn.classList.add('incorrect');
                 else eventBBtn.classList.add('incorrect');
+                // Mutasd a helyeset is
                 if(currentEventPair[0].sortKey === actualEarlierEvent.sortKey) eventABtn.classList.add('correct');
                 else eventBBtn.classList.add('correct');
             }
