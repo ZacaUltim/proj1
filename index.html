@@ -91,9 +91,8 @@
         .stats-display p { margin: 6px 0; font-size: 1em; color: #ccc;}
         .stats-display .label { color: #00A8E8; font-weight: bold;}
         .stats-display .medal { font-size: 2.2em; margin-top: 5px; } 
-         #quiz-progress-container { 
-            margin-top: 15px; text-align: center; font-size: 0.9em; color: #bbb;
-        }
+        #final-timeline-stats { display: none; margin-top: 20px; padding: 15px; background-color: #3a3a3a; border-radius: 6px; border: 1px solid #505050; text-align:center; }
+        #final-timeline-stats h3 { color: #F1C40F; }
     </style>
 </head>
 <body>
@@ -104,7 +103,7 @@
         
         <div class="question-area">
             <div id="quiz-section-title-display" class="question-section-title">Témakör</div>
-            <div id="question-display" class="question-text">Kattints a "Start / Következő kérdés" gombra!</div>
+            <div id="question-display" class="question-text">Betöltés...</div>
             <div id="answer-display-container" class="answer-container">
                 <strong class="answer-title">Helyes válasz:</strong>
                 <div id="answer-display" class="answer-text"></div>
@@ -117,25 +116,21 @@
 
         <div class="button-container">
             <button id="show-answer-btn" onclick="showQuizAnswer()" disabled>Válasz mutatása</button>
-            <button id="next-question-btn" onclick="nextQuizQuestion()">Start / Következő kérdés</button>
-        </div>
-        <div id="quiz-progress-container">
-            <p><span id="progress-info">0/0</span></p>
-            <button id="reset-quiz-btn" onclick="resetQuiz()" style="display:none; margin-top:10px;">Újra</button>
+            <button id="next-question-btn" onclick="loadRandomQuizQuestion()">Másik Kérdés</button>
         </div>
     </div>
 
     <div class="game-section" id="timeline-section-container">
         <h2>Időrend Gyakorló</h2>
         <div id="timeline-start-screen">
-            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Készen állsz? Indulhat az időrendi harc!</p>
+            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Készen állsz? Indulhat az időrendi harc! 10 körös lesz.</p>
             <div class="button-container" style="justify-content: center;">
                 <button id="start-timeline-game-btn" onclick="startTimelineGame()">Start Időrend</button>
             </div>
         </div>
 
         <div id="timeline-game-content" style="display:none;">
-            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Melyik esemény történt korábban?</p>
+            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Melyik esemény történt korábban? (<span id="timeline-round-counter">1</span>/10)</p>
             <div id="event-pair-display">
                 <p style="text-align:center; font-weight:bold; font-size:1.1em; color: #E74C3C;">Melyik volt előbb?</p>
                 <div class="event-options">
@@ -145,16 +140,17 @@
             </div>
             <div id="timeline-feedback">Várom a válaszod...</div>
             <div class="button-container" style="justify-content: center;">
-                <button id="next-pair-btn" onclick="loadNewEventPair()">Következő pár</button>
+                <button id="next-pair-btn" onclick="loadNewEventPair()" disabled>Következő pár</button>
             </div>
         </div>
-         <div class="stats-display" id="timeline-stats" style="margin-top: 20px;"> 
-            <p><span class="label">Próbálkozások:</span> <span id="timeline-attempts-display">0</span></p>
-            <p><span class="label">Helyes válaszok:</span> <span id="timeline-correct-display">0</span> (<span id="timeline-accuracy-display">0</span>%)</p>
-            <p><span class="label">Átlagos válaszidő (helyes):</span> <span id="timeline-avg-time-display">N/A</span> mp</p>
-            <p class="medal" id="timeline-medal-display">⏳</p>
-            <button id="reset-timeline-btn" onclick="resetTimelineGame()" style="margin-top:10px;">Újra</button>
-        </div>
+        <div id="final-timeline-stats">
+             <h3>Játék Vége - Eredményeid:</h3>
+             <p><span class="label">Összes próbálkozás:</span> <span id="final-attempts-display">0</span></p>
+             <p><span class="label">Helyes válaszok:</span> <span id="final-correct-display">0</span> (<span id="final-accuracy-display">0</span>%)</p>
+             <p><span class="label">Átlagos válaszidő (helyes):</span> <span id="final-avg-time-display">N/A</span> mp</p>
+             <p class="medal" id="final-medal-display">⏳</p>
+             <button onclick="startTimelineGame()" style="margin-top:15px;">Újrapróbálkozás</button>
+         </div>
     </div>
 
     <script>
@@ -166,39 +162,266 @@
         }
 
         const allQuizQuestions = [
-            // FONTOS: Ide másold be az összes kérdésedet a `short`, `explanation`, `simple` mezőkkel!
+            // I. Teleki Pál miniszterelnöksége - 1920. júl.-1921. ápr.
             { 
                 section: "I. Teleki Pál miniszterelnöksége", 
-                question: "Mikor volt Teleki Pál első miniszterelnöksége?", 
+                question: "Ki dolgozta ki a földreformot Teleki Pál miniszterelnöksége alatt, és ki volt ő?", 
                 answer: {
-                    short: "1920. július – 1921. április.",
-                    explanation: "Teleki Pál első miniszterelnöki időszaka 1920 júliusától 1921 áprilisáig tartott, a Tanácsköztársaság bukása és a trianoni békeszerződés utáni nehéz időkben.",
-                    simple: "Teleki 1920-21 körül volt először a főnök, amikor nagy volt a káosz az országban."
-                }
-            },
-             { 
-                section: "I. Teleki Pál miniszterelnöksége", 
-                question: "Ki volt a földművelési miniszter Teleki kormányában, aki a földreformot kidolgozta?", 
-                answer: {
-                    short: "Nagyatádi Szabó István.",
-                    explanation: "Nagyatádi Szabó István, a Kisgazdapárt vezető politikusa volt a földművelési miniszter, és ő felelt a Teleki-kormány földreformjának előkészítéséért.",
-                    simple: "Nagyatádi Szabó István próbált földet adni a parasztoknak Teleki idején."
+                    short: "Nagyatádi Szabó István (földművelési miniszter).",
+                    explanation: "A földreform kidolgozása Nagyatádi Szabó István nevéhez fűződik, aki Teleki kormányának földművelési minisztere volt.",
+                    simple: "Nagyatádi Szabó volt a miniszter, aki a földosztással foglalkozott Teleki idején."
                 }
             },
             { 
-                section: "II. Bethlen István konszolidációs politikája", 
-                question: "Mit jelent a 'konszolidáció' Bethlen István politikájában?", 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Körülbelül hány paraszt kapott földet Teleki földreformja során, és mekkorát?", 
                 answer: {
-                    short: "A társadalmi, gazdasági és politikai helyzet stabilizálását, a nyugalom megteremtését egy válságos időszak után.",
-                    explanation: "A bethleni konszolidáció célja az volt, hogy a háború, forradalmak és Trianon utáni bizonytalan, ingatag helyzetet megszilárdítsa, és nyugalmat, stabilitást teremtsen az országban.",
-                    simple: "Bethlen rendet akart tenni a nagy káosz után, hogy az ország megnyugodjon és fejlődni tudjon."
+                    short: "~300.000 paraszt, 5-10 hold földet.",
+                    explanation: "A földreform eredményeként mintegy 300.000 paraszt jutott átlagosan 5-10 hold földhöz.",
+                    simple: "Sok paraszt kapott egy kis darab földet."
                 }
             },
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Mi maradt meg a földbirtokrendszerben a Teleki-féle földreform ellenére?", 
+                answer: {
+                    short: "A nagybirtok rendszer megmaradt (sokan földnélküliek maradtak).",
+                    explanation: "Annak ellenére, hogy sokan kaptak földet, a nagybirtokok rendszere továbbra is fennmaradt, és sokan maradtak földnélküliek.",
+                    simple: "A gazdagok nagy földjei megmaradtak, nem mindenki kapott."
+                }
+            },
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Milyen fellépést alkalmazott Teleki kormánya a szélsőséges pártok (pl. kommunisták) ellen?", 
+                answer: {
+                    short: "Betiltás, börtön, kivégzés.",
+                    explanation: "A Teleki-kormány határozottan lépett fel a szélsőséges pártokkal, például a kommunistákkal szemben, ami magában foglalta a pártok betiltását, tagjaik bebörtönzését, és akár kivégzését is.",
+                    simple: "Telekiék keményen bántak a szélsőségesekkel, főleg a komcsikkal."
+                }
+            },
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Mit jelentett a „numerus clausus” („zárt szám”)?", 
+                answer: {
+                    short: "Egyetemeken a „népfajok” és nemzetiségek felvétele az országos arányukhoz volt kötve.",
+                    explanation: "A numerus clausus törvény értelmében az egyetemi felvételiknél az egyes „népfajok” (elsősorban a zsidóságra vonatkoztatva) és nemzetiségek arányát az országos népességarányukhoz igazították.",
+                    simple: "Korlátozták, hogy melyik népcsoportból hányan mehetnek egyetemre."
+                }
+            },
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Milyen célt szolgált az „őrségváltás” a numerus clausus kontextusában?", 
+                answer: {
+                    short: "A zsidó értelmiség felváltása keresztény, nemzeti értelmiségre.",
+                    explanation: "Az „őrségváltás” kifejezés arra a folyamatra utalt, melynek során a zsidó értelmiséget igyekeztek felváltani egy keresztény, nemzeti elkötelezettségű értelmiségi réteggel.",
+                    simple: "A zsidó okosokat lecserélték keresztény magyar okosokra."
+                }
+            },
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Mikor történt az I. királypuccs, és ki kísérelte meg visszaszerezni a trónt?", 
+                answer: {
+                    short: "1921. márc.-ápr., IV. Károly.",
+                    explanation: "Az első királypuccs 1921 március-áprilisában zajlott, amikor IV. Károly sikertelen kísérletet tett a magyar trón visszaszerzésére.",
+                    simple: "IV. Károly király 1921-ben megpróbált visszajönni, de nem jött össze neki."
+                }
+            },
+            { 
+                section: "I. Teleki Pál miniszterelnöksége", 
+                question: "Mi lett Teleki Pál sorsa az I. királypuccs után?", 
+                answer: {
+                    short: "Lemondott.",
+                    explanation: "Az első királypuccs kudarcát követően Teleki Pál miniszterelnök lemondott tisztségéről.",
+                    simple: "Teleki beadta a felmondását a király balhéja után."
+                }
+            },
+            // II. gróf Bethlen István miniszterelnök konszolidációs politikája (1921-1931)
+            { 
+                section: "II. Bethlen István politikája", 
+                question: "Mely pártokból jött létre az Egységes Párt, és milyen eszméket vallott?", 
+                answer: {
+                    short: "Kisgazdapárt + KNEP = Egységes Párt. Erős kormánypárt, elhatárolódik a szélsőségektől, keresztény/nemzeti/konzervatív.",
+                    explanation: "Az Egységes Párt a Kisgazdapárt és a Keresztény Nemzeti Egyesülés Pártjának (KNEP) egyesüléséből jött létre. Célja egy erős kormánypárt megteremtése volt, amely elhatárolódik a szélsőségektől és keresztény, nemzeti, konzervatív eszméket vall.",
+                    simple: "Két párt összeállt, hogy erős legyen a kormány, és ne legyenek szélsőségesek."
+                }
+            },
+            { 
+                section: "II. Bethlen István politikája", 
+                question: "Mikor kötötték a Bethlen-Peyer paktumot, és melyik párt működését korlátozta?", 
+                answer: {
+                    short: "1921-ben, az MSZDP (szociáldemokraták) működését.",
+                    explanation: "A Bethlen-Peyer paktumot 1921-ben kötötték, és a legjelentősebb ellenzéki erő, a Magyarországi Szociáldemokrata Párt (MSZDP) működésének korlátozását célozta.",
+                    simple: "Bethlen megegyezett a szocdemekkel, hogy kicsit visszafogják magukat."
+                }
+            },
+            { 
+                section: "II. Bethlen István politikája", 
+                question: "Miről kellett lemondania az MSZDP-nek a Bethlen-Peyer paktum értelmében? (legalább 2)", 
+                answer: {
+                    short: "Postások, vasutasok, közalkalmazottak szervezéséről; kapcsolatairól a kommunistákkal; propagandáról bel- és külföldön.",
+                    explanation: "Az MSZDP a paktumban többek között lemondott a postások, vasutasok, közalkalmazottak szervezéséről, a kommunistákkal való kapcsolatairól, valamint a bel- és külföldi propagandatevékenységről.",
+                    simple: "A szocdemek nem szervezhették a postásokat, vasutasokat, és nem haverkodhattak a komcsikkal."
+                }
+            },
+            { 
+                section: "II. Bethlen István politikája", 
+                question: "Mit kapott cserébe az MSZDP a Bethlen-Peyer paktumért?", 
+                answer: {
+                    short: "Törvényesen működhettek; indulhattak a választásokon.",
+                    explanation: "A vállalt korlátozásokért cserébe az MSZDP törvényes keretek között működhetett tovább, és részt vehetett a választásokon.",
+                    simple: "Cserébe a szocdemek legálisan működhettek és választásokon is indulhattak."
+                }
+            },
+            { 
+                section: "II. Bethlen István politikája", 
+                question: "Mi volt az új választójogi törvény célja Bethlen alatt, és milyen főbb jellemzői voltak?", 
+                answer: {
+                    short: "Kormánypárt parlamenti többségének biztosítása. Cenzusos választójog, nyílt választási rendszer (nagyvárosok kivételével).",
+                    explanation: "Az új választójogi törvény bevezetésének célja a kormánypárt parlamenti többségének biztosítása volt. Ezt cenzusos választójoggal (vagyon, kor, műveltség alapján) és a nagyvárosok kivételével nyílt választási rendszerrel érték el.",
+                    simple: "Úgy alakították a választást, hogy a kormány nyerjen. Nem mindenki szavazhatott, és sok helyen nem volt titkos."
+                }
+            },
+            { 
+                section: "II. Bethlen István politikája", 
+                question: "Hogyan jellemezhető a Bethlen-korszak parlamentarizmusa a tananyag szerint?", 
+                answer: {
+                    short: "Korlátozott parlamentarizmus: nehezen leváltható kormánypárt, gyenge ellenzék, radikális változások akadályozva → ország talpra állhatott.",
+                    explanation: "A Bethlen-korszak parlamentarizmusát korlátozottnak nevezik, ahol a kormánypárt nehezen volt leváltható, az ellenzék gyenge maradt, és a radikális változásokat megakadályozták. Ez a stabilitás hozzájárult az ország talpra állásához.",
+                    simple: "A kormány nagyon erős volt, az ellenzék gyenge. Így tudott az ország kicsit összeszedni magát."
+                }
+            },
+            { 
+                section: "II. Bethlen István politikája", 
+                question: "Mikor volt a II. sikertelen királypuccs, hol volt a csata, és mi lett a király sorsa?", 
+                answer: {
+                    short: "1921. okt., budaörsi csata, a király száműzése.",
+                    explanation: "A második sikertelen királypuccsra 1921 októberében került sor, a döntő ütközet Budaörsnél zajlott. Ezt követően IV. Károlyt száműzték.",
+                    simple: "IV. Károly megint megpróbálta 1921-ben, de Budaörsnél elverték, és elküldték messzire."
+                }
+            },
+            { 
+                section: "II. Bethlen István politikája", 
+                question: "Milyen törvényt hoztak 1921 novemberében a Habsburg-házzal kapcsolatban?", 
+                answer: {
+                    short: "Habsburg-ház trónfosztása – detronizáció.",
+                    explanation: "A második királypuccs után, 1921 novemberében törvényt hoztak a Habsburg-ház trónfosztásáról, amit detronizációnak neveznek.",
+                    simple: "Kimondták, hogy a Habsburgok többet nem lehetnek magyar királyok."
+                }
+            },
+            // III. Gazdasági konszolidáció
+            { 
+                section: "III. Gazdasági konszolidáció", 
+                question: "Miért volt szükség gazdasági szerkezetváltásra az 1920-as években? (Legalább 2 ok)", 
+                answer: {
+                    short: "I. világháború, Monarchia felbomlása, Trianon gazdasági következményei, inflációs politika veszélyei.",
+                    explanation: "A gazdasági szerkezetváltás szükségességét az első világháború, az Osztrák-Magyar Monarchia felbomlása, a trianoni békeszerződés súlyos gazdasági következményei, valamint az addig folytatott, pénzkibocsátáson alapuló inflációs politika veszélyei indokolták.",
+                    simple: "A háború és Trianon tönkretette a gazdaságot, változtatni kellett."
+                }
+            },
+            { 
+                section: "III. Gazdasági konszolidáció", 
+                question: "Melyik évben lépett Magyarország a Népszövetségbe, és milyen gazdasági előnnyel járt ez?", 
+                answer: {
+                    short: "1922, kölcsönfelvétel (250 millió aranykorona) → állami beruházások.",
+                    explanation: "Magyarország 1922-ben lépett be a Népszövetségbe, ami lehetővé tette egy 250 millió aranykoronás kölcsön felvételét, amelyből állami beruházásokat kezdeményezhettek.",
+                    simple: "Beléptünk a Népszövetségbe, és kaptunk egy csomó pénzt kölcsönbe, amiből fejleszteni tudtunk."
+                }
+            },
+            { 
+                section: "III. Gazdasági konszolidáció", 
+                question: "Mikor jött létre a Magyar Nemzeti Bank?", 
+                answer: {
+                    short: "1924-ben.",
+                    explanation: "A Magyar Nemzeti Bank 1924-ben jött létre a gazdasági konszolidáció részeként.",
+                    simple: "1924-ben lett saját központi bankunk."
+                }
+            },
+            { 
+                section: "III. Gazdasági konszolidáció", 
+                question: "Mikor vezették be az új, értékálló pénznemet, és mi volt a neve?", 
+                answer: {
+                    short: "1927-ben, a pengő.",
+                    explanation: "1927-ben vezették be az új, értékálló pénznemet, a pengőt, amely stabil alapot biztosított a gazdaságnak.",
+                    simple: "1927-től lett a pengő a pénzünk, ami már nem értéktelenedett el olyan gyorsan."
+                }
+            },
+            { 
+                section: "III. Gazdasági konszolidáció", 
+                question: "Milyen iparágak modernizációja történt a gazdasági szerkezetváltás során? (Legalább 2)", 
+                answer: {
+                    short: "Könnyűipar: textilipar, konzervipar; elektronika.",
+                    explanation: "A gazdasági szerkezetváltás során modernizálták a könnyűipart (pl. textilipar, konzervipar) és fejlesztették az elektronikai ipart.",
+                    simple: "Fejlesztették a textil-, konzerv- és elektronikai gyárakat."
+                }
+            },
+            { 
+                section: "III. Gazdasági konszolidáció", 
+                question: "Mi indokolta a turizmus fejlesztését (pl. Lillafüred)?", 
+                answer: {
+                    short: "A trianoni békeszerződés (elveszett üdülőhelyek pótlása).",
+                    explanation: "A turizmus fejlesztését, például utak és szállodák építését (mint Lillafüreden), a trianoni békeszerződés indokolta, mivel az ország elvesztette hagyományos üdülőterületeit.",
+                    simple: "Trianon miatt elcsatolták a régi nyaralóhelyeket, ezért újakat kellett építeni itthon."
+                }
+            },
+            { 
+                section: "III. Gazdasági konszolidáció", 
+                question: "Milyen feladatot jelentett a repatriáltak elhelyezése?", 
+                answer: {
+                    short: "Fontos feladat volt a Trianon után érkezők elhelyezése.",
+                    explanation: "A Trianon után az anyaországba érkező menekültek (repatriáltak) elhelyezése komoly társadalmi és gazdasági feladatot jelentett.",
+                    simple: "Sok magyar jött haza az elcsatolt részekről, nekik lakást kellett adni."
+                }
+            },
+            { 
+                section: "III. Gazdasági konszolidáció", 
+                question: "Milyen típusú országgá vált Magyarország a gazdasági konszolidáció következtében?", 
+                answer: {
+                    short: "Agrár-ipari országgá (az ipar egyre jelentősebb lett a mezőgazdaság mellett).",
+                    explanation: "A gazdasági konszolidáció eredményeként Magyarország agrár-ipari országgá vált, ahol a mezőgazdaság mellett az ipar is egyre jelentősebb szerephez jutott.",
+                    simple: "Nemcsak földművelésből éltünk, hanem a gyárak is fontosak lettek."
+                }
+            },
+            // IV. Bethlen külpolitikája
+            { 
+                section: "IV. Bethlen külpolitikája", 
+                question: "Melyik államszövetség korlátozta Magyarország mozgásterét, és melyik nagyhatalom állt mögötte?", 
+                answer: {
+                    short: "A Kisántant, mögötte Franciaország.",
+                    explanation: "Magyarország külpolitikai mozgásterét a Kisántant (Csehszlovákia, Románia, Jugoszlávia) korlátozta, amelyet Franciaország támogatott.",
+                    simple: "A szomszéd országok (Kisántant) és Franciaország nem hagyták, hogy Magyarország sokat ugráljon."
+                }
+            },
+            { 
+                section: "IV. Bethlen külpolitikája", 
+                question: "Mikor csatlakozott Magyarország a Népszövetséghez?", 
+                answer: {
+                    short: "1922-ben.",
+                    explanation: "Magyarország 1922-ben csatlakozott a Népszövetséghez, ami fontos lépés volt a nemzetközi elszigeteltségből való kitörés felé.",
+                    simple: "1922-ben beléptünk a 'világ országainak klubjába'."
+                }
+            },
+            { 
+                section: "IV. Bethlen külpolitikája", 
+                question: "Melyik délszláv államhoz próbált közeledni Magyarország Bethlen alatt, és miért?", 
+                answer: {
+                    short: "A Szerb-Horvát-Szlovén Királysághoz (Jugoszlávia); egység megbontása + enyhe sérelmek orvoslása.",
+                    explanation: "Bethlen külpolitikája próbált közeledni a Szerb-Horvát-Szlovén Királysághoz (a későbbi Jugoszláviához), részben annak egységét megbontani kívánva, részben pedig enyhe sérelmek orvoslása érdekében.",
+                    simple: "Próbáltunk jóban lenni Jugoszláviával, hátha szétesnek, vagy visszakapunk valamit."
+                }
+            },
+            { 
+                section: "IV. Bethlen külpolitikája", 
+                question: "Melyik országgal kötött Magyarország örökbarátsági szerződést 1927-ben?", 
+                answer: {
+                    short: "Olaszországgal.",
+                    explanation: "1927-ben Magyarország és Olaszország örökbarátsági szerződést kötött, ami jelentős külpolitikai lépés volt.",
+                    simple: "Bethlenék az olaszokkal lettek jóbarátok 1927-ben."
+                }
+            }
         ];
 
         let shuffledQuizQuestions = [];
-        let currentQuizQuestionIndex = -1;
-        let quizActive = false; 
+        let currentQuizQuestionIndex = -1; // Nincs értelme, ha mindig random
 
         const quizSectionTitleDisplay = document.getElementById('quiz-section-title-display');
         const quizQuestionDisplay = document.getElementById('question-display');
@@ -206,76 +429,38 @@
         const quizAnswerDisplay = document.getElementById('answer-display');
         const quizExplanationDisplay = document.getElementById('explanation-display');
         const simpleExplanationDisplay = document.getElementById('simple-explanation-display');
-        const quizProgressInfo = document.getElementById('progress-info');
         const quizShowAnswerBtn = document.getElementById('show-answer-btn');
         const quizNextQuestionBtn = document.getElementById('next-question-btn');
-        const resetQuizBtn = document.getElementById('reset-quiz-btn');
         
-        function resetQuiz() {
-            quizActive = false;
-            currentQuizQuestionIndex = -1;
-            quizProgressInfo.textContent = `0/${shuffledQuizQuestions.length}`;
-            quizQuestionDisplay.textContent = "Kattints a \"Start / Következő kérdés\" gombra!";
-            quizSectionTitleDisplay.textContent = "Témakör";
-            quizAnswerDisplayContainer.style.display = "none";
-            quizShowAnswerBtn.disabled = true;
-            quizNextQuestionBtn.textContent = "Start / Következő kérdés";
-            quizNextQuestionBtn.disabled = false;
-            resetQuizBtn.style.display = "none";
-            loadQuiz(); 
-        }
-
-        function loadQuiz() {
-            shuffledQuizQuestions = [...allQuizQuestions];
-            shuffleArray(shuffledQuizQuestions); // Kérdések keverése minden újrakezdéskor
-            quizProgressInfo.textContent = `0/${shuffledQuizQuestions.length}`;
-            if (shuffledQuizQuestions.length === 0) {
+        function loadRandomQuizQuestion() {
+            if (allQuizQuestions.length === 0) {
                 quizQuestionDisplay.textContent = "Nincsenek kérdések a kvízhez.";
-                quizNextQuestionBtn.disabled = true;
-            } else {
-                quizNextQuestionBtn.disabled = false;
-            }
-        }
-
-        function displayCurrentQuizQuestion() {
-            if (currentQuizQuestionIndex < shuffledQuizQuestions.length) {
-                const q = shuffledQuizQuestions[currentQuizQuestionIndex];
-                quizSectionTitleDisplay.textContent = q.section;
-                quizQuestionDisplay.textContent = q.question;
-                quizAnswerDisplay.textContent = q.answer.short;
-                quizExplanationDisplay.textContent = q.answer.explanation;
-                simpleExplanationDisplay.textContent = q.answer.simple;
-                quizAnswerDisplayContainer.style.display = 'none';
-                quizShowAnswerBtn.disabled = false;
-                quizProgressInfo.textContent = `${currentQuizQuestionIndex + 1}/${shuffledQuizQuestions.length}`;
-            }
-        }
-        
-        function nextQuizQuestion() {
-            if (!quizActive) {
-                if (shuffledQuizQuestions.length === 0) return;
-                quizActive = true;
-                resetQuizBtn.style.display = "inline-block";
-            }
-
-            currentQuizQuestionIndex++;
-            if (currentQuizQuestionIndex < shuffledQuizQuestions.length) {
-                quizNextQuestionBtn.textContent = "Következő kérdés";
-                displayCurrentQuizQuestion();
-            } else {
-                quizQuestionDisplay.textContent = "A kvíz végére értél! Nyomd meg az 'Újra' gombot, ha folytatnád.";
-                quizSectionTitleDisplay.textContent = "Kvíz befejezve";
-                quizAnswerDisplayContainer.style.display = 'none';
                 quizShowAnswerBtn.disabled = true;
                 quizNextQuestionBtn.disabled = true;
-                quizNextQuestionBtn.textContent = "Vége";
+                return;
             }
+            
+            // Mindig újrakeverjük, hogy ne ugyanazokat hozza fel sűrűn, ha kevés a kérdés
+            // Ha nagyon sok kérdés van, ez a sor kivehető a jobb teljesítményért,
+            // de akkor a Math.random() dominálna.
+            shuffleArray(allQuizQuestions); 
+
+            const randomIndex = Math.floor(Math.random() * allQuizQuestions.length);
+            const q = allQuizQuestions[randomIndex];
+
+            quizSectionTitleDisplay.textContent = q.section;
+            quizQuestionDisplay.textContent = q.question;
+            quizAnswerDisplay.textContent = q.answer.short;
+            quizExplanationDisplay.textContent = q.answer.explanation;
+            simpleExplanationDisplay.textContent = q.answer.simple;
+            quizAnswerDisplayContainer.style.display = 'none';
+            quizShowAnswerBtn.disabled = false;
+            quizNextQuestionBtn.disabled = false; // Mindig aktív, hogy lehessen másikat kérni
+            quizNextQuestionBtn.textContent = "Másik Kérdés"; // Gomb feliratának frissítése
         }
 
         function showQuizAnswer() {
-            if (quizActive && currentQuizQuestionIndex >= 0 && currentQuizQuestionIndex < shuffledQuizQuestions.length) {
-                quizAnswerDisplayContainer.style.display = 'block';
-            }
+            quizAnswerDisplayContainer.style.display = 'block';
         }
         
         const timelineEvents = [ 
@@ -297,9 +482,11 @@
         let currentEventPair = [];
         let timelineAttempts = 0;
         let timelineCorrectAnswers = 0;
-        let totalTimelineResponseTimeForCorrect = 0; // Csak a helyes válaszok idejét tárolja
+        let totalTimelineResponseTimeForCorrect = 0;
         let currentPairStartTime = 0;
         let timelineGameActive = false;
+        let timelineRoundsPlayed = 0;
+        const TIMELINE_ROUNDS_TOTAL = 10;
 
         const timelineStartScreen = document.getElementById('timeline-start-screen');
         const timelineGameContent = document.getElementById('timeline-game-content');
@@ -307,19 +494,23 @@
         const eventBBtn = document.getElementById('eventB-btn');
         const timelineFeedback = document.getElementById('timeline-feedback');
         const nextPairBtn = document.getElementById('next-pair-btn');
-        const timelineAttemptsDisplay = document.getElementById('timeline-attempts-display');
-        const timelineCorrectDisplay = document.getElementById('timeline-correct-display');
-        const timelineAccuracyDisplay = document.getElementById('timeline-accuracy-display');
-        const timelineAvgTimeDisplay = document.getElementById('timeline-avg-time-display');
-        const timelineMedalDisplay = document.getElementById('timeline-medal-display');
-        const resetTimelineBtn = document.getElementById('reset-timeline-btn');
+        const timelineRoundCounter = document.getElementById('timeline-round-counter');
+
+        const finalTimelineStatsDiv = document.getElementById('final-timeline-stats');
+        const finalAttemptsDisplay = document.getElementById('final-attempts-display');
+        const finalCorrectDisplay = document.getElementById('final-correct-display');
+        const finalAccuracyDisplay = document.getElementById('final-accuracy-display');
+        const finalAvgTimeDisplay = document.getElementById('final-avg-time-display');
+        const finalMedalDisplay = document.getElementById('final-medal-display');
+
 
         function startTimelineGame() {
             timelineStartScreen.style.display = 'none';
+            finalTimelineStatsDiv.style.display = 'none'; // Eredményjelző elrejtése
             timelineGameContent.style.display = 'block';
             document.querySelector('.event-options').style.display = 'block';
-            resetTimelineBtn.style.display = 'inline-block'; 
             timelineGameActive = true;
+            timelineRoundsPlayed = 0;
             resetTimelineGameStats(); 
             loadNewEventPair();
         }
@@ -327,21 +518,23 @@
         function resetTimelineGameStats() { 
             timelineAttempts = 0;
             timelineCorrectAnswers = 0;
-            totalTimelineResponseTimeForCorrect = 0; // Ezt is nullázni kell
-            updateTimelineStats(); 
-            timelineMedalDisplay.textContent = "⏳"; 
+            totalTimelineResponseTimeForCorrect = 0;
+            // Az updateTimelineStats itt nem kell, mert a végső kijelzőre írunk
         }
 
-        function updateTimelineStats() {
-            timelineAttemptsDisplay.textContent = timelineAttempts;
-            timelineCorrectDisplay.textContent = timelineCorrectAnswers;
+        function showFinalTimelineStats() {
+            timelineGameContent.style.display = 'none';
+            finalTimelineStatsDiv.style.display = 'block';
+
+            finalAttemptsDisplay.textContent = timelineAttempts;
+            finalCorrectDisplay.textContent = timelineCorrectAnswers;
             const accuracy = timelineAttempts > 0 ? ((timelineCorrectAnswers / timelineAttempts) * 100).toFixed(0) : 0;
-            timelineAccuracyDisplay.textContent = accuracy;
+            finalAccuracyDisplay.textContent = accuracy;
             const avgTime = timelineCorrectAnswers > 0 ? (totalTimelineResponseTimeForCorrect / timelineCorrectAnswers / 1000).toFixed(1) : "N/A";
-            timelineAvgTimeDisplay.textContent = avgTime;
+            finalAvgTimeDisplay.textContent = avgTime;
 
             let medal = "⏳"; 
-            if (timelineAttempts >= 5) { 
+            if (timelineAttempts >= TIMELINE_ROUNDS_TOTAL) { // Csak ha lejátszotta a 10 kört
                 const accuracyRate = parseFloat(accuracy);
                 const avgResponseSec = parseFloat(avgTime);
 
@@ -350,22 +543,20 @@
                 else if (accuracyRate >= 50) medal = "🥉 Bronz";
                 else medal = "📖 Gyakorolj!";
             }
-            timelineMedalDisplay.textContent = medal;
+            finalMedalDisplay.textContent = medal;
         }
         
-        function resetTimelineGame() {
-            timelineStartScreen.style.display = 'block'; 
-            timelineGameContent.style.display = 'none';
-            document.querySelector('.event-options').style.display = 'none';
-            resetTimelineBtn.style.display = 'none';
-            timelineGameActive = false;
-            resetTimelineGameStats(); 
-        }
-
         function loadNewEventPair() {
-             if (!timelineGameActive) return; 
+            if (!timelineGameActive) return; 
 
-             if (timelineEvents.length < 2) {
+            if (timelineRoundsPlayed >= TIMELINE_ROUNDS_TOTAL) {
+                showFinalTimelineStats();
+                return;
+            }
+            timelineRoundsPlayed++;
+            timelineRoundCounter.textContent = timelineRoundsPlayed;
+
+            if (timelineEvents.length < 2) {
                 timelineFeedback.textContent = "Nincs elég esemény a játékhoz.";
                 eventABtn.style.display = "none";
                 eventBBtn.style.display = "none";
@@ -422,15 +613,14 @@
                 if(currentEventPair[0].sortKey === actualEarlierEvent.sortKey) eventABtn.classList.add('correct');
                 else eventBBtn.classList.add('correct');
             }
-            updateTimelineStats();
+            // A statisztikákat már nem frissítjük minden körben, csak a végén
         }
         
         window.onload = () => {
-            loadQuiz();
+            loadRandomQuizQuestion(); // Kvíz elindítása egy random kérdéssel
             timelineStartScreen.style.display = 'block';
             timelineGameContent.style.display = 'none';
-            resetTimelineBtn.style.display = 'none';
-            updateTimelineStats(); 
+            finalTimelineStatsDiv.style.display = 'none';
         };
     </script>
 </body>
