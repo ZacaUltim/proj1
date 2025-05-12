@@ -162,7 +162,7 @@
     </div>
 
     <script>
-        function shuffleArray(array) {
+                function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
@@ -195,4 +195,111 @@
             { section: "III. Gazdasági konszolidáció", question: "Milyen iparágak modernizációja történt a gazdasági szerkezetváltás során? (Legalább 2)", answer: { short: "Könnyűipar: textilipar, konzervipar; elektronika.", explanation: "A gazdasági szerkezetváltás során modernizálták a könnyűipart (pl. textilipar, konzervipar) és fejlesztették az elektronikai ipart.", simple: "Fejlesztették a textil-, konzerv- és elektronikai gyárakat." }},
             { section: "III. Gazdasági konszolidáció", question: "Mi indokolta a turizmus fejlesztését (pl. Lillafüred)?", answer: { short: "A trianoni békeszerződés (elveszett üdülőhelyek pótlása).", explanation: "A turizmus fejlesztését, például utak és szállodák építését (mint Lillafüreden), a trianoni békeszerződés indokolta, mivel az ország elvesztette hagyományos üdülőterületeit.", simple: "Trianon miatt elcsatolták a régi nyaralóhelyeket, ezért újakat kellett építeni itthon." }},
             { section: "III. Gazdasági konszolidáció", question: "Milyen feladatot jelentett a repatriáltak elhelyezése?", answer: { short: "Fontos feladat volt a Trianon után érkezők elhelyezése.", explanation: "A Trianon után az anyaországba érkező menekültek (repatriáltak) elhelyezése komoly társadalmi és gazdasági feladatot jelentett.", simple: "Sok magyar jött haza az elcsatolt részekről, nekik lakást kellett adni." }},
-            { section: "III. Gazdasági konszolidáció", question: "Milyen típusú országgá vált Magyarország a gazdasági konszolidáció következtében?", answer: { short: "Agrár
+            { section: "III. Gazdasági konszolidáció", question: "Milyen típusú országgá vált Magyarország a gazdasági konszolidáció következtében?", answer: { short: "Agrár-ipari országgá (az ipar egyre jelentősebb lett a mezőgazdaság mellett).", explanation: "A gazdasági konszolidáció eredményeként Magyarország agrár-ipari országgá vált, ahol a mezőgazdaság mellett az ipar is egyre jelentősebb szerephez jutott.", simple: "Nemcsak földművelésből éltünk, hanem a gyárak is fontosak lettek." }},
+            { section: "IV. Bethlen külpolitikája", question: "Melyik államszövetség korlátozta Magyarország mozgásterét, és melyik nagyhatalom állt mögötte?", answer: { short: "A Kisántant, mögötte Franciaország.", explanation: "Magyarország külpolitikai mozgásterét a Kisántant (Csehszlovákia, Románia, Jugoszlávia) korlátozta, amelyet Franciaország támogatott.", simple: "A szomszéd országok (Kisántant) és Franciaország nem hagyták, hogy Magyarország sokat ugráljon." }},
+            { section: "IV. Bethlen külpolitikája", question: "Mikor csatlakozott Magyarország a Népszövetséghez?", answer: { short: "1922-ben.", explanation: "Magyarország 1922-ben csatlakozott a Népszövetséghez, ami fontos lépés volt a nemzetközi elszigeteltségből való kitörés felé.", simple: "1922-ben beléptünk a 'világ országainak klubjába'." }},
+            { section: "IV. Bethlen külpolitikája", question: "Melyik délszláv államhoz próbált közeledni Magyarország Bethlen alatt, és miért?", answer: { short: "A Szerb-Horvát-Szlovén Királysághoz (Jugoszlávia); egység megbontása + enyhe sérelmek orvoslása.", explanation: "Bethlen külpolitikája próbált közeledni a Szerb-Horvát-Szlovén Királysághoz (a későbbi Jugoszláviához), részben annak egységét megbontani kívánva, részben pedig enyhe sérelmek orvoslása érdekében.", simple: "Próbáltunk jóban lenni Jugoszláviával, hátha szétesnek, vagy visszakapunk valamit." }},
+            { section: "IV. Bethlen külpolitikája", question: "Melyik országgal kötött Magyarország örökbarátsági szerződést 1927-ben?", answer: { short: "Olaszországgal.", explanation: "1927-ben Magyarország és Olaszország örökbarátsági szerződést kötött, ami jelentős külpolitikai lépés volt.", simple: "Bethlenék az olaszokkal lettek jóbarátok 1927-ben." }}
+        ];
+
+        const quizSectionTitleDisplay = document.getElementById('quiz-section-title-display');
+        const quizQuestionDisplay = document.getElementById('question-display');
+        const quizAnswerDisplayContainer = document.getElementById('answer-display-container');
+        const quizAnswerDisplay = document.getElementById('answer-display');
+        const quizExplanationDisplay = document.getElementById('explanation-display');
+        const simpleExplanationDisplay = document.getElementById('simple-explanation-display');
+        const quizShowAnswerBtn = document.getElementById('show-answer-btn');
+        const quizNextQuestionBtn = document.getElementById('next-question-btn');
+        
+        function loadRandomQuizQuestion() {
+            if (allQuizQuestions.length === 0) {
+                quizQuestionDisplay.textContent = "Nincsenek kérdések a kvízhez.";
+                quizShowAnswerBtn.disabled = true;
+                quizNextQuestionBtn.disabled = true;
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * allQuizQuestions.length);
+            const q = allQuizQuestions[randomIndex];
+
+            quizSectionTitleDisplay.textContent = q.section;
+            quizQuestionDisplay.textContent = q.question;
+            quizAnswerDisplay.textContent = q.answer.short;
+            quizExplanationDisplay.textContent = q.answer.explanation;
+            simpleExplanationDisplay.textContent = q.answer.simple;
+            quizAnswerDisplayContainer.style.display = 'none';
+            quizShowAnswerBtn.disabled = false;
+            quizNextQuestionBtn.disabled = false; 
+            quizNextQuestionBtn.textContent = "Másik Kérdés";
+        }
+
+        function showQuizAnswer() {
+            quizAnswerDisplayContainer.style.display = 'block';
+        }
+        
+        // --- Időrend Gyakorló Játék Logika ---
+        const timelineEvents = [ 
+            { text: "Teleki Pál miniszterelnökségének kezdete", year: 1920, month: 7, sortKey: 1920.07 },
+            { text: "A Numerus Clausus törvény bevezetése", year: 1920, month: 9, sortKey: 1920.09 }, 
+            { text: "Az I. királypuccs (IV. Károly kísérlete)", year: 1921, month: 3, sortKey: 1921.03 }, 
+            { text: "Teleki Pál lemondása", year: 1921, month: 4, sortKey: 1921.04 },
+            { text: "Bethlen István miniszterelnökségének kezdete", year: 1921, month: 4, sortKey: 1921.041 }, 
+            { text: "A Bethlen-Peyer paktum megkötése", year: 1921, month: 12, sortKey: 1921.12 }, 
+            { text: "A II. királypuccs (budaörsi csata)", year: 1921, month: 10, sortKey: 1921.10 },
+            { text: "A Habsburg-ház trónfosztása (detronizáció)", year: 1921, month: 11, sortKey: 1921.11 },
+            { text: "Magyarország belépése a Népszövetségbe", year: 1922, month: 9, sortKey: 1922.09 }, 
+            { text: "Az új választójogi törvény bevezetése (Bethlen)", year: 1922, month: 3, sortKey: 1922.03 }, 
+            { text: "A Magyar Nemzeti Bank létrehozása", year: 1924, month: 6, sortKey: 1924.06 }, 
+            { text: "Az új pénznem, a pengő bevezetése", year: 1927, month: 1, sortKey: 1927.01 }, 
+            { text: "Az olasz-magyar örökbarátsági szerződés megkötése", year: 1927, month: 4, sortKey: 1927.04 }
+        ];
+
+        let currentEventPair = [];
+        let timelineAttempts = 0;
+        let timelineCorrectAnswers = 0;
+        let totalTimelineResponseTimeForCorrect = 0;
+        let currentPairStartTime = 0;
+        let timelineGameActive = false;
+        let timelineRoundsPlayed = 0;
+        const TIMELINE_ROUNDS_TOTAL = 10;
+        let correctOrderShown = false;
+
+        const timelineStartScreen = document.getElementById('timeline-start-screen');
+        const timelineGameContent = document.getElementById('timeline-game-content');
+        const eventABtn = document.getElementById('eventA-btn');
+        const eventBBtn = document.getElementById('eventB-btn');
+        const timelineFeedback = document.getElementById('timeline-feedback');
+        const nextPairBtn = document.getElementById('next-pair-btn');
+        const timelineRoundCounter = document.getElementById('timeline-round-counter');
+        const showTimelineOrderBtn = document.getElementById('show-timeline-order-btn');
+        const timelineCorrectOrderContainer = document.getElementById('timeline-correct-order-container');
+        const timelineCorrectOrderList = document.getElementById('timeline-correct-order-list');
+        const startTimelineGameBtn = document.getElementById('start-timeline-game-btn');
+
+        const finalTimelineStatsDiv = document.getElementById('final-timeline-stats');
+        const finalAttemptsDisplay = document.getElementById('final-attempts-display');
+        const finalCorrectDisplay = document.getElementById('final-correct-display');
+        const finalAccuracyDisplay = document.getElementById('final-accuracy-display');
+        const finalAvgTimeDisplay = document.getElementById('final-avg-time-display');
+        const finalRankDisplay = document.getElementById('final-rank-display'); 
+
+
+        function toggleShowCorrectTimelineOrder() {
+            if (timelineGameActive) { 
+                timelineGameActive = false; 
+                timelineGameContent.style.display = 'none'; 
+                finalTimelineStatsDiv.style.display = 'none'; 
+                timelineFeedback.textContent = "A játék leállt a sorrend megtekintése miatt.";
+                // Itt nem kell a nextPairBtn-t kezelni, mert a game content elrejtődik
+            }
+            
+            if (timelineCorrectOrderContainer.style.display === 'none') {
+                const sortedEvents = [...timelineEvents].sort((a, b) => a.sortKey - b.sortKey);
+                timelineCorrectOrderList.innerHTML = ''; 
+                sortedEvents.forEach(event => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${event.text} (${event.year}${event.month ? '.'+String(event.month).padStart(2,'0') : ''})`;
+                    timelineCorrectOrderList.appendChild(listItem);
+                });
+                timelineCorrectOrderContainer.style.display = 'block';
+                showTimelineOrderBtn.textContent
