@@ -91,8 +91,6 @@
 
         #timeline-correct-order-list { list-style-type: decimal; padding-left: 20px; text-align: left; margin-top:15px; background-color: #3d3d3d; padding:10px; border-radius:5px;}
         #timeline-correct-order-list li { margin-bottom: 5px; color: #ddd;}
-        #timeline-controls-container { display: flex; justify-content: center; align-items: center; margin-bottom: 15px;}
-
     </style>
 </head>
 <body>
@@ -122,19 +120,20 @@
 
     <div class="game-section" id="timeline-section-container">
         <h2>Időrend Gyakorló</h2>
-        
-        <div id="timeline-correct-order-container" style="display:none; margin-bottom: 20px;">
+        <div id="timeline-controls">
+            <button id="show-timeline-order-btn" onclick="toggleShowCorrectTimelineOrder()">Helyes Sorrend Mutatása</button>
+        </div>
+        <div id="timeline-correct-order-container" style="display:none;">
             <h3>Helyes Időrendi Sorrend:</h3>
             <ol id="timeline-correct-order-list"></ol>
             <button onclick="toggleShowCorrectTimelineOrder()" style="margin-top:15px;">Sorrend Elrejtése</button>
         </div>
 
         <div id="timeline-start-screen">
-             <div id="timeline-controls-container"> {/* Gombok egy sorban */}
-                <button id="show-timeline-order-btn" onclick="toggleShowCorrectTimelineOrder()" style="margin-right: 10px;">Helyes Sorrend</button>
+            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-bottom: 15px;">Készen állsz? Indulhat az időrendi harc! 10 körös lesz.</p>
+            <div class="button-container" style="justify-content: center;">
                 <button id="start-timeline-game-btn" onclick="startTimelineGame()">Start Időrend</button>
             </div>
-            <p style="text-align: center; font-size: 0.9em; color: #aaa; margin-top: 15px;">Készen állsz? Indulhat az időrendi harc! 10 körös lesz.</p>
         </div>
 
         <div id="timeline-game-content" style="display:none;">
@@ -169,8 +168,8 @@
             }
         }
 
-        // --- Kvíz Logika ---
         const allQuizQuestions = [
+            // ITT VANNAK AZ ÁLTALAD KORÁBBAN MEGADOTT KÉPEK ALAPJÁN ÖSSZEÁLLÍTOTT KÉRDÉSEK
             // I. Teleki Pál miniszterelnöksége - 1920. júl.-1921. ápr.
             { section: "I. Teleki Pál miniszterelnöksége", question: "Ki dolgozta ki a földreformot Teleki Pál miniszterelnöksége alatt, és ki volt ő?", answer: { short: "Nagyatádi Szabó István (földművelési miniszter).", explanation: "A földreform kidolgozása Nagyatádi Szabó István nevéhez fűződik, aki Teleki kormányának földművelési minisztere volt.", simple: "Nagyatádi Szabó volt a miniszter, aki a földosztással foglalkozott Teleki idején." }},
             { section: "I. Teleki Pál miniszterelnöksége", question: "Körülbelül hány paraszt kapott földet Teleki földreformja során, és mekkorát?", answer: { short: "~300.000 paraszt, 5-10 hold földet.", explanation: "A földreform eredményeként mintegy 300.000 paraszt jutott átlagosan 5-10 hold földhöz.", simple: "Sok paraszt kapott egy kis darab földet." }},
@@ -180,6 +179,7 @@
             { section: "I. Teleki Pál miniszterelnöksége", question: "Milyen célt szolgált az „őrségváltás” a numerus clausus kontextusában?", answer: { short: "A zsidó értelmiség felváltása keresztény, nemzeti értelmiségre.", explanation: "Az „őrségváltás” kifejezés arra a folyamatra utalt, melynek során a zsidó értelmiséget igyekeztek felváltani egy keresztény, nemzeti elkötelezettségű értelmiségi réteggel.", simple: "A zsidó okosokat lecserélték keresztény magyar okosokra." }},
             { section: "I. Teleki Pál miniszterelnöksége", question: "Mikor történt az I. királypuccs, és ki kísérelte meg visszaszerezni a trónt?", answer: { short: "1921. márc.-ápr., IV. Károly.", explanation: "Az első királypuccs 1921 március-áprilisában zajlott, amikor IV. Károly sikertelen kísérletet tett a magyar trón visszaszerzésére.", simple: "IV. Károly király 1921-ben megpróbált visszajönni, de nem jött össze neki." }},
             { section: "I. Teleki Pál miniszterelnöksége", question: "Mi lett Teleki Pál sorsa az I. királypuccs után?", answer: { short: "Lemondott.", explanation: "Az első királypuccs kudarcát követően Teleki Pál miniszterelnök lemondott tisztségéről.", simple: "Teleki beadta a felmondását a király balhéja után." }},
+            // II. gróf Bethlen István miniszterelnök konszolidációs politikája (1921-1931)
             { section: "II. Bethlen István politikája", question: "Mely pártokból jött létre az Egységes Párt, és milyen eszméket vallott?", answer: { short: "Kisgazdapárt + KNEP = Egységes Párt. Erős kormánypárt, elhatárolódik a szélsőségektől, keresztény/nemzeti/konzervatív.", explanation: "Az Egységes Párt a Kisgazdapárt és a Keresztény Nemzeti Egyesülés Pártjának (KNEP) egyesüléséből jött létre. Célja egy erős kormánypárt megteremtése volt, amely elhatárolódik a szélsőségektől és keresztény, nemzeti, konzervatív eszméket vall.", simple: "Két párt összeállt, hogy erős legyen a kormány, és ne legyenek szélsőségesek." }},
             { section: "II. Bethlen István politikája", question: "Mikor kötötték a Bethlen-Peyer paktumot, és melyik párt működését korlátozta?", answer: { short: "1921-ben, az MSZDP (szociáldemokraták) működését.", explanation: "A Bethlen-Peyer paktumot 1921-ben kötötték, és a legjelentősebb ellenzéki erő, a Magyarországi Szociáldemokrata Párt (MSZDP) működésének korlátozását célozta.", simple: "Bethlen megegyezett a szocdemekkel, hogy kicsit visszafogják magukat." }},
             { section: "II. Bethlen István politikája", question: "Miről kellett lemondania az MSZDP-nek a Bethlen-Peyer paktum értelmében? (legalább 2)", answer: { short: "Postások, vasutasok, közalkalmazottak szervezéséről; kapcsolatairól a kommunistákkal; propagandáról bel- és külföldön.", explanation: "Az MSZDP a paktumban többek között lemondott a postások, vasutasok, közalkalmazottak szervezéséről, a kommunistákkal való kapcsolatairól, valamint a bel- és külföldi propagandatevékenységről.", simple: "A szocdemek nem szervezhették a postásokat, vasutasokat, és nem haverkodhattak a komcsikkal." }},
@@ -188,6 +188,7 @@
             { section: "II. Bethlen István politikája", question: "Hogyan jellemezhető a Bethlen-korszak parlamentarizmusa a tananyag szerint?", answer: { short: "Korlátozott parlamentarizmus: nehezen leváltható kormánypárt, gyenge ellenzék, radikális változások akadályozva → ország talpra állhatott.", explanation: "A Bethlen-korszak parlamentarizmusát korlátozottnak nevezik, ahol a kormánypárt nehezen volt leváltható, az ellenzék gyenge maradt, és a radikális változásokat megakadályozták. Ez a stabilitás hozzájárult az ország talpra állásához.", simple: "A kormány nagyon erős volt, az ellenzék gyenge. Így tudott az ország kicsit összeszedni magát." }},
             { section: "II. Bethlen István politikája", question: "Mikor volt a II. sikertelen királypuccs, hol volt a csata, és mi lett a király sorsa?", answer: { short: "1921. okt., budaörsi csata, a király száműzése.", explanation: "A második sikertelen királypuccsra 1921 októberében került sor, a döntő ütközet Budaörsnél zajlott. Ezt követően IV. Károlyt száműzték.", simple: "IV. Károly megint megpróbálta 1921-ben, de Budaörsnél elverték, és elküldték messzire." }},
             { section: "II. Bethlen István politikája", question: "Milyen törvényt hoztak 1921 novemberében a Habsburg-házzal kapcsolatban?", answer: { short: "Habsburg-ház trónfosztása – detronizáció.", explanation: "A második királypuccs után, 1921 novemberében törvényt hoztak a Habsburg-ház trónfosztásáról, amit detronizációnak neveznek.", simple: "Kimondták, hogy a Habsburgok többet nem lehetnek magyar királyok." }},
+            // III. Gazdasági konszolidáció
             { section: "III. Gazdasági konszolidáció", question: "Miért volt szükség gazdasági szerkezetváltásra az 1920-as években? (Legalább 2 ok)", answer: { short: "I. világháború, Monarchia felbomlása, Trianon gazdasági következményei, inflációs politika veszélyei.", explanation: "A gazdasági szerkezetváltás szükségességét az első világháború, az Osztrák-Magyar Monarchia felbomlása, a trianoni békeszerződés súlyos gazdasági következményei, valamint az addig folytatott, pénzkibocsátáson alapuló inflációs politika veszélyei indokolták.", simple: "A háború és Trianon tönkretette a gazdaságot, változtatni kellett." }},
             { section: "III. Gazdasági konszolidáció", question: "Melyik évben lépett Magyarország a Népszövetségbe, és milyen gazdasági előnnyel járt ez?", answer: { short: "1922, kölcsönfelvétel (250 millió aranykorona) → állami beruházások.", explanation: "Magyarország 1922-ben lépett be a Népszövetségbe, ami lehetővé tette egy 250 millió aranykoronás kölcsön felvételét, amelyből állami beruházásokat kezdeményezhettek.", simple: "Beléptünk a Népszövetségbe, és kaptunk egy csomó pénzt kölcsönbe, amiből fejleszteni tudtunk." }},
             { section: "III. Gazdasági konszolidáció", question: "Mikor jött létre a Magyar Nemzeti Bank?", answer: { short: "1924-ben.", explanation: "A Magyar Nemzeti Bank 1924-ben jött létre a gazdasági konszolidáció részeként.", simple: "1924-ben lett saját központi bankunk." }},
@@ -195,4 +196,4 @@
             { section: "III. Gazdasági konszolidáció", question: "Milyen iparágak modernizációja történt a gazdasági szerkezetváltás során? (Legalább 2)", answer: { short: "Könnyűipar: textilipar, konzervipar; elektronika.", explanation: "A gazdasági szerkezetváltás során modernizálták a könnyűipart (pl. textilipar, konzervipar) és fejlesztették az elektronikai ipart.", simple: "Fejlesztették a textil-, konzerv- és elektronikai gyárakat." }},
             { section: "III. Gazdasági konszolidáció", question: "Mi indokolta a turizmus fejlesztését (pl. Lillafüred)?", answer: { short: "A trianoni békeszerződés (elveszett üdülőhelyek pótlása).", explanation: "A turizmus fejlesztését, például utak és szállodák építését (mint Lillafüreden), a trianoni békeszerződés indokolta, mivel az ország elvesztette hagyományos üdülőterületeit.", simple: "Trianon miatt elcsatolták a régi nyaralóhelyeket, ezért újakat kellett építeni itthon." }},
             { section: "III. Gazdasági konszolidáció", question: "Milyen feladatot jelentett a repatriáltak elhelyezése?", answer: { short: "Fontos feladat volt a Trianon után érkezők elhelyezése.", explanation: "A Trianon után az anyaországba érkező menekültek (repatriáltak) elhelyezése komoly társadalmi és gazdasági feladatot jelentett.", simple: "Sok magyar jött haza az elcsatolt részekről, nekik lakást kellett adni." }},
-            { section: "III. Gazdasági konszolidáció", question: "Milyen típusú országgá vált Magyarország a gazdasági konszolidáció következtében?",
+            { section: "III. Gazdasági konszolidáció", question: "Milyen tí
